@@ -8,8 +8,6 @@ public class ExampleGUI {
 
     public static void main(String[] args) {
 
-
-
         JFrame gameJFame = new JFrame("Game");
 
         gameJFame.setResizable(false);
@@ -23,13 +21,6 @@ public class ExampleGUI {
 
         gameJFame.setBackground(new Color(board_bg_color));
 
-        //int i=0;
-        //Letter[] letters = new Letter[6];
-        //for (char e:"ABCDEF".toCharArray()) {
-        //    letters[i] = Letter.charToLetter(e);
-        //    gameJFame.add(new JLabel(letters[i].getIcon()));
-        //    i++;
-        //}
 
 
         gameJFame.setVisible(true);
