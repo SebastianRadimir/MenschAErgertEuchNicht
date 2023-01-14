@@ -15,11 +15,11 @@ public class ExampleGUI {
 
         gameJFame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        gameJFame.setLayout(new BorderLayout());
+        gameJFame.setLayout(null);
 
-        gameJFame.add(new Board(),BorderLayout.CENTER);
+        gameJFame.add(new Board(5,6));
 
-        gameJFame.setBackground(new Color(board_bg_color));
+        gameJFame.setBackground(board_bg_color);
 
 
 
