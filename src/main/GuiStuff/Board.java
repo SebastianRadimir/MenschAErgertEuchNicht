@@ -18,7 +18,7 @@ public class Board extends JPanel {
     private int xOffset = board_width/2;
     private int yOffset = board_height/2;
     private int circleSize = min(xOffset/2,yOffset/2);
-    private double perc = 0.8;
+    private double perc = 0.5;
     private double amplification = 100;
     private int tileAmo;
     private int tileSize = 30;
@@ -53,8 +53,10 @@ public class Board extends JPanel {
             double yPos = (circleSize*Math.sin(ni)) + yOffset;
 
             double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY);
+
             xArr[i] = (int)(xPos+(pn*amplification));
             yArr[i] = (int)(yPos+(pn*amplification));
+
         }
 
         xPlayerPos = new int[playerAmount];

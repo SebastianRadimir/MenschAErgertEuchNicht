@@ -1,7 +1,6 @@
 package GuiStuff;
 
 import javax.swing.*;
-import java.awt.*;
 
 import static GuiStuff.Settings.*;
 public class ExampleGUI {
@@ -17,7 +16,7 @@ public class ExampleGUI {
 
         gameJFame.setLayout(null);
 
-        gameJFame.add(new Board(5,6));
+        gameJFame.add(new Board(4,4));
 
         gameJFame.setBackground(board_bg_color);
 
