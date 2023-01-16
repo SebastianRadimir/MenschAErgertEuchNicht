@@ -16,7 +16,7 @@ public class ExampleGUI {
 
         gameJFame.setLayout(null);
 
-        gameJFame.add(new Board(4,4));
+        gameJFame.add(new Board(3,4));
 
         gameJFame.setBackground(board_bg_color);
 

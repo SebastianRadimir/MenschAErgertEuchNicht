@@ -18,8 +18,8 @@ public class Board extends JPanel {
     private int xOffset = board_width/2;
     private int yOffset = board_height/2;
     private int circleSize = min(xOffset/2,yOffset/2);
-    private double perc = 0.5;
-    private double amplification = 100;
+    private double perc = 0.9;
+    private double amplification = 0.6;
     private int tileAmo;
     private int tileSize = 30;
 
@@ -49,13 +49,10 @@ public class Board extends JPanel {
 
             double ni = circlePrecisionInterval*i;
 
-            double xPos = (circleSize*Math.cos(ni)) + xOffset;
-            double yPos = (circleSize*Math.sin(ni)) + yOffset;
+            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
 
-            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY);
-
-            xArr[i] = (int)(xPos+(pn*amplification));
-            yArr[i] = (int)(yPos+(pn*amplification));
+            xArr[i] = (int)((circleSize*Math.cos(ni)*(pn+1)) + xOffset);
+            yArr[i] = (int)((circleSize*Math.sin(ni)*(pn+1)) + yOffset);
 
         }
 
@@ -87,12 +84,8 @@ public class Board extends JPanel {
 
             double ni = (PI2/tileAmo)*i;
 
-            double xPos = (circleSize*Math.cos(ni)) + xOffset;
-            double yPos = (circleSize*Math.sin(ni)) + yOffset;
-
-            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY);
-
-            g.fillOval((int)(xPos+(pn*amplification))-(tileSize/2), (int)(yPos+(pn*amplification))-(tileSize/2), tileSize, tileSize);
+            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
+            g.fillOval((int)((circleSize*Math.cos(ni)*(pn+1)) + xOffset-tileSize/2),(int)((circleSize*Math.sin(ni)*(pn+1)) + yOffset-tileSize/2), tileSize,tileSize);
         }
 
         for (int p = 0; p < playerAmount; p++) {
