@@ -2,15 +2,15 @@ package Backend;
 
 import java.awt.*;
 
-public class Figure {
+public class Figure{
 
     private boolean isHome;
     private boolean reachedEnd;
     private int position;
     private final Color figureColor;
 
-    public Figure(int pos, Color c){
-        position = pos;
+    public Figure(int index, Color c){
+        position = index;
         figureColor = c;
         isHome = true;
         reachedEnd = false;
@@ -19,13 +19,14 @@ public class Figure {
     public Color getColor(){
         return figureColor;
     }
-    public int getFieldPos(){
+    public int getFieldIndex(){
         return position;
     }
     public boolean isRunning(){
-        return !isHome;
+        return !isHome && !reachedEnd;
     }
     public boolean inFinishLine(){
         return reachedEnd;
     }
+
 }
