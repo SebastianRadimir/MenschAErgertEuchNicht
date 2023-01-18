@@ -18,7 +18,7 @@ public class Settings {
     public static int boardCenterX = board_width/2;
     public static int boardCenterY = board_height/2;
     public static int circleSize = min(boardCenterY/2,boardCenterX/2);
-    public static int fieldSize = 30;
+    public static int fieldSize = 10;
     public static Color board_bg_color = new Color(36,70,103);
     public static Color board_line_color = new Color(115, 95, 71);
     public static Color board_tile_color = new Color(206, 171, 96);
@@ -29,5 +29,8 @@ public class Settings {
         boardCenterY = board_height/2;
         circleSize = min(boardCenterY/2,boardCenterX/2);
 
+    }
+    public static void setFieldSize(int playerAmount){
+        fieldSize = (int)(((Math.pow(playerAmount,(-Math.E/4.0))/0.03))+8.0);
     }
 }
