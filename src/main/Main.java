@@ -18,10 +18,9 @@ public class Main {
 
         board_width = size.width;
         board_height = size.height;
-        int playerAmount = 4;
-        int figureAmount = 4;
+        playerAmount = 4;
+        figureAmount = 4;
         reload();
-        setFieldSize(playerAmount);
         gameJFame.setSize(board_width,board_height);
 
         gameJFame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

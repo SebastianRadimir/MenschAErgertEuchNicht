@@ -42,16 +42,22 @@ public class Field{
         return pf;
     }
 
+    public int getX(){
+        return posX;
+    }
+    public int getY(){
+        return posY;
+    }
+
     public void draw(Graphics g) {
 
         if (isOccupied()) {
             g.setColor(getFigure().getColor());
-        }else {
+        } else {
             g.setColor(board_tile_color);
         }
 
-        g.fillOval(posX-(fieldSize/2), posY-(fieldSize/2), fieldSize,fieldSize);
-
+        g.fillOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
     }
 
 }
