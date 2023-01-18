@@ -16,7 +16,7 @@ public class Board {
     private int currentPlayerIndex;
     private final int playerAmount;
     private final double perc = 0.7;
-    private final double amplification = 0.5;
+    private final double amplification = 1.0;
     private final int[] courseLineArrX;
     private final int[] courseLineArrY;
 
@@ -33,10 +33,10 @@ public class Board {
 
             double ni = circlePrecisionInterval*i;
 
-            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
+            double pn = (PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification)+1;
 
-            courseLineArrX[i] = (int)((circleSize*Math.cos(ni)*(pn+1)) + boardCenterX);
-            courseLineArrY[i] = (int)((circleSize*Math.sin(ni)*(pn+1)) + boardCenterY);
+            courseLineArrX[i] = (int)((circleSize*Math.cos(ni)*pn) + boardCenterX);
+            courseLineArrY[i] = (int)((circleSize*Math.sin(ni)*pn) + boardCenterY);
 
         }
 
@@ -49,8 +49,8 @@ public class Board {
         for (int i = 0; i < playerAmount*fieldPerPerson; i++) {
             double ni = div*i;
 
-            double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
-            course[i] = new Field(i, (int)((circleSize*Math.cos(ni)*(pn+1)) + boardCenterX), (int)((circleSize*Math.sin(ni)*(pn+1)) + boardCenterY));
+            double pn = (PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification)+1;
+            course[i] = new Field(i, (int)((circleSize*Math.cos(ni)*pn) + boardCenterX), (int)((circleSize*Math.sin(ni)*pn) + boardCenterY));
         }
     }
 
