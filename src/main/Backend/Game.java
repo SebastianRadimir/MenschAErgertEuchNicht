@@ -7,7 +7,7 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
-    private Board board;
+    private final Board board;
 
     private int[] courseLineArrX;
     private int[] courseLineArrY;
@@ -17,10 +17,7 @@ public class Game extends JPanel {
 
         this.board = board;
 
-
     }
-
-
 
     @Override
     public void paintComponent(Graphics g) {

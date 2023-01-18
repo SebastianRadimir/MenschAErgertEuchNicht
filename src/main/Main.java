@@ -4,6 +4,7 @@ import Backend.*;
 import javax.swing.*;
 
 import java.awt.*;
+import java.util.Random;
 
 import static GuiStuff.Settings.*;
 public class Main {
@@ -20,6 +21,7 @@ public class Main {
         board_height = size.height;
         playerAmount = 4;
         figureAmount = 4;
+
         reload();
         gameJFame.setSize(board_width,board_height);
 
@@ -29,17 +31,14 @@ public class Main {
 
         Player[] ps = new Player[playerAmount];
         for (int i = 0; i < ps.length; i++) {
-            ps[i] = new Player(i, figureAmount, new Color(255, 0, 0), "Bruh");
+            ps[i] = new Player(i, figureAmount, new Color((int)(new Random().nextFloat()*255), (int)(new Random().nextFloat()*255), (int)(new Random().nextFloat()*255)), "Bruh");
         }
 
         Game g = new Game(new Board(ps));
 
         gameJFame.add(g);
 
-
         //gameJFame.setBackground(board_bg_color);
-
-
 
         gameJFame.setVisible(true);
     }

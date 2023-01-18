@@ -8,8 +8,6 @@ import static java.lang.Math.min;
 
 public class Settings {
 
-    //public static int board_width = 1280;
-    //public static int board_height = 1280;
     public static int playerAmount = 4;
     public static int figureAmount = 4;
     public static int circlePrecision = 360;
@@ -29,8 +27,8 @@ public class Settings {
 
         boardCenterX = board_width/2;
         boardCenterY = board_height/2;
-        circleSize = (int)min(boardCenterY*0.65,boardCenterX*0.65);//min(boardCenterY/2,boardCenterX/2);
-        fieldSize = (int)(((Math.pow(playerAmount,(-Math.E/4.0))/0.03))+8.0);
+        circleSize = (int)min(boardCenterY*0.65,boardCenterX*0.65);
+        fieldSize = (int)(((Math.pow(playerAmount,(-Math.E/4.0))/0.02))+8.0);
 
     }
 }

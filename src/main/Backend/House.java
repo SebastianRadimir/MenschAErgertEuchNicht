@@ -6,7 +6,7 @@ import static GuiStuff.Settings.*;
 
 public class House {
 
-    private Player owner;
+    private final Player owner;
     public Field[] rooms;
 
     public House(Player owner, Field[] rooms){

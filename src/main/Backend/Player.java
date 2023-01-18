@@ -6,11 +6,16 @@ import static GuiStuff.Settings.*;
 
 public class Player {
 
-    private Figure[] figures;
-    private Color playerColor;
-    private String playerName;
-    private int playerIndex;
-    private House home;
+    private final Figure[] figures;
+    private final Color playerColor;
+    private final String playerName;
+    private final int playerIndex;
+    private final House home;
+    private final int maX;
+    private final int maY;
+    private final int miX;
+    private final int miY;
+
 
     public Player(int playerIndex, int figureAmount, Color playerColor, String playerName){
         this.playerIndex = playerIndex;
@@ -31,6 +36,12 @@ public class Player {
             double pn = (dists*(figureAmount-i))+minDist;
             homeFields[i] = new Field(i, (int)((Math.cos(angle)*pn) + boardCenterX), (int)((Math.sin(angle)*pn) + boardCenterY));
         }
+        maX = (int)(Math.cos(angle)*(dists+minDist)) + boardCenterX;
+        maY = (int)(Math.sin(angle)*(dists+minDist)) + boardCenterY;
+
+        miX = (int)(Math.cos(angle)*(2.2*(circleSize/2.0))) + boardCenterX;
+        miY = (int)(Math.sin(angle)*(2.2*(circleSize/2.0))) + boardCenterY;
+
         home = new House(this, homeFields);
 
     }
@@ -58,9 +69,12 @@ public class Player {
 
     public void draw(Graphics g){
 
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(fieldSize/3.0f));
+        g.setColor(board_line_color);
+        g.drawLine(maX,maY,miX,miY);
+
         this.home.draw(g);
-
-
 
     }
 }

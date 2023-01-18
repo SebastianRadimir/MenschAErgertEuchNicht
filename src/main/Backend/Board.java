@@ -5,15 +5,12 @@ import java.awt.*;
 import static GuiStuff.Settings.*;
 
 public class Board {
-    private Player[] players;
-    private Field[] course;
+    private final Player[] players;
+    private final Field[] course;
     private int currentPlayerIndex;
     private final int playerAmount;
-    //private final double perc = 0.7;
-    //private final double amplification = 0.5;
     private final int[] courseLineArrX;
     private final int[] courseLineArrY;
-
     public Board(Player[] players){
         this.players = players;
 
@@ -28,7 +25,6 @@ public class Board {
 
             double ni = circlePrecisionInterval*i;
 
-            //double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
             double pn = (Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0);
             courseLineArrX[i] = (int)((Math.cos(ni)*pn) + boardCenterX);
             courseLineArrY[i] = (int)((Math.sin(ni)*pn) + boardCenterY);
@@ -41,7 +37,6 @@ public class Board {
         for (int i = 3; i < (playerAmount*fieldPerPerson)+3; i++) {
             double ni = div*(i+0.5);
 
-            //double pn = PerlinNoise.noise((Math.cos(ni)/perc)+randX,(Math.sin(ni)/perc)+randY)*amplification;
             double pn = (Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0);
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
@@ -64,6 +59,10 @@ public class Board {
 
     public void draw(Graphics g){
 
+        for (int i = 0; i < playerAmount; i++) {
+            players[i].draw(g);
+        }
+
         g.setColor(board_line_color);
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(fieldSize/3.0f));
@@ -73,8 +72,12 @@ public class Board {
             course[i].draw(g);
         }
 
+        g2.setStroke(new BasicStroke(fieldSize/5.0f));
         for (int i = 0; i < playerAmount; i++) {
-            players[i].draw(g);
+            g.setColor(players[i].getColor());
+            int x = course[i*10].getX();
+            int y = course[i*10].getY();
+            g.drawOval(x - (fieldSize / 2),y - (fieldSize / 2), fieldSize, fieldSize);
         }
 
     }
