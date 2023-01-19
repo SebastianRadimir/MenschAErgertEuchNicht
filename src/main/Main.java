@@ -20,7 +20,7 @@ public class Main {
         board_width = size.width;
         board_height = size.height;
         playerAmount = 4;
-        figureAmount = 4;
+        figureAmount = 10;
 
         reload();
         gameJFame.setSize(board_width,board_height);

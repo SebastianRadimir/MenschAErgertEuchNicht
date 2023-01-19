@@ -22,6 +22,7 @@ public class Settings {
     public static Color board_bg_color = new Color(36,70,103);
     public static Color board_line_color = new Color(115, 95, 71);
     public static Color board_tile_color = new Color(206, 171, 96);
+    public static Color highlight_color = new Color(42, 187, 220);
 
     public static void reload(){
 

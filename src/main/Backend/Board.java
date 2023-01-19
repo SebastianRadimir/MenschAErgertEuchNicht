@@ -25,7 +25,7 @@ public class Board {
 
             double ni = circlePrecisionInterval*i;
 
-            double pn = (Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0);
+            double pn = Math.max((Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0),(Math.sqrt(playerAmount)*(circleSize/4.0)));
             courseLineArrX[i] = (int)((Math.cos(ni)*pn) + boardCenterX);
             courseLineArrY[i] = (int)((Math.sin(ni)*pn) + boardCenterY);
 
@@ -37,7 +37,7 @@ public class Board {
         for (int i = 3; i < (playerAmount*fieldPerPerson)+3; i++) {
             double ni = div*(i+0.5);
 
-            double pn = (Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0);
+            double pn = Math.max((Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0),(Math.sqrt(playerAmount)*(circleSize/4.0)));
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
     }
@@ -75,8 +75,8 @@ public class Board {
         g2.setStroke(new BasicStroke(fieldSize/5.0f));
         for (int i = 0; i < playerAmount; i++) {
             g.setColor(players[i].getColor());
-            int x = course[i*10].getX();
-            int y = course[i*10].getY();
+            int x = course[i*fieldPerPerson].getX();
+            int y = course[i*fieldPerPerson].getY();
             g.drawOval(x - (fieldSize / 2),y - (fieldSize / 2), fieldSize, fieldSize);
         }
 
