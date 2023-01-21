@@ -67,14 +67,14 @@ public class Player {
         return playerIndex;
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g, int mpx, int mpy){
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(fieldSize/3.0f));
         g.setColor(board_line_color);
         g.drawLine(maX,maY,miX,miY);
 
-        this.home.draw(g);
+        this.home.draw(g, mpx, mpy);
 
     }
 }

@@ -57,10 +57,10 @@ public class Board {
 
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g, int xpos, int ypos){
 
         for (int i = 0; i < playerAmount; i++) {
-            players[i].draw(g);
+            players[i].draw(g, xpos,ypos);
         }
 
         g.setColor(board_line_color);
@@ -69,7 +69,7 @@ public class Board {
         g.drawPolygon(courseLineArrX, courseLineArrY,circlePrecision);
 
         for (int i = 0; i < playerAmount*fieldPerPerson; i++) {
-            course[i].draw(g);
+            course[i].draw(g, xpos,ypos);
         }
 
         g2.setStroke(new BasicStroke(fieldSize/5.0f));

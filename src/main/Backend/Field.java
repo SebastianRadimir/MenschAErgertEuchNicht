@@ -2,8 +2,7 @@ package Backend;
 
 import java.awt.*;
 
-import static GuiStuff.Settings.board_tile_color;
-import static GuiStuff.Settings.fieldSize;
+import static GuiStuff.Settings.*;
 
 public class Field{
 
@@ -49,7 +48,7 @@ public class Field{
         return posY;
     }
 
-    public void draw(Graphics g) {
+    public void draw(Graphics g, int mousePosX, int mousePosY) {
 
         if (isOccupied()) {
             g.setColor(getFigure().getColor());
@@ -58,6 +57,14 @@ public class Field{
         }
 
         g.fillOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
+
+        if (Math.sqrt(((mousePosX - posX)*(mousePosX - posX)) + ((mousePosY - posY) * (mousePosY - posY))) <= (fieldSize/2.0)) {
+            g.setColor(highlight_color);
+            g.drawOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
+        }else {
+            g.setColor(board_tile_color);
+            g.drawOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
+        }
     }
 
 }

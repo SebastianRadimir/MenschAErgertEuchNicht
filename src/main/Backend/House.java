@@ -36,7 +36,7 @@ public class House {
         return rooms;
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g, int mpx, int mpy){
 
         g.setColor(board_line_color);
         Graphics2D g2 = (Graphics2D) g;
@@ -46,7 +46,7 @@ public class House {
         for (Field room : rooms) {
             int x = room.getX();
             int y = room.getY();
-            room.draw(g);
+            room.draw(g,mpx ,mpy);
             g.setColor(c);
             g.drawOval(x-(fieldSize/2), y-(fieldSize/2), fieldSize,fieldSize);
         }

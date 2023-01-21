@@ -14,13 +14,13 @@ public class Main {
         JFrame gameJFame = new JFrame("Game");
         gameJFame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameJFame.setResizable(false);
-        //gameJFame.setUndecorated(true);
+        gameJFame.setUndecorated(true);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
         board_width = size.width;
         board_height = size.height;
-        playerAmount = 4;
-        figureAmount = 10;
+        playerAmount = 4;  // max 20
+        figureAmount = 4;  // max 25
 
         reload();
         gameJFame.setSize(board_width,board_height);
