@@ -5,10 +5,9 @@ import java.awt.*;
 import static GuiStuff.Settings.*;
 
 public class Board {
-    private final Player[] players;
-    private final Field[] course;
-    private int currentPlayerIndex;
-    private final int playerAmount;
+    public final Player[] players;
+    public final Field[] course;
+    public final int playerAmount;
     private final int[] courseLineArrX;
     private final int[] courseLineArrY;
     public Board(Player[] players){
@@ -18,7 +17,6 @@ public class Board {
         courseLineArrY = new int[circlePrecision];
         double circlePrecisionInterval = PI2/circlePrecision;
 
-        currentPlayerIndex = 0;
         playerAmount = this.players.length;
 
         for (int i = 0; i < circlePrecision; i++) {
@@ -42,19 +40,19 @@ public class Board {
         }
     }
 
-    public int nextPlayer(){
-        currentPlayerIndex = (currentPlayerIndex+1)%this.playerAmount;
-        return currentPlayerIndex;
-    }
+    public Field getField(int xPos, int yPos){
+        for (int i = 0; i < playerAmount*fieldPerPerson; i++) {
 
-    public void moveFigure(Field selectedField, int amount){
-        if (!selectedField.isOccupied()){
-            return;
-        }
-        if (!selectedField.getFigure().isRunning()) {
-            course[(selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson)].setFigure(selectedField.clearField());
-        }
+            Field f = course[i];
 
+            int x = f.getX();
+            int y = f.getY();
+
+            if (Math.sqrt(((xPos - x)*(xPos - x)) + ((yPos - y) * (yPos - y))) <= (fieldSize/2.0)){
+                return f;
+            }
+        }
+        return null;
     }
 
     public void draw(Graphics g, int xpos, int ypos){
