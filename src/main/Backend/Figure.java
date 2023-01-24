@@ -6,21 +6,24 @@ public class Figure{
 
     private boolean isHome;
     private boolean reachedEnd;
-    private int position;
     private final Color figureColor;
 
-    public Figure(int index, Color c){
-        position = index;
+    public Figure(Color c){
         figureColor = c;
         isHome = true;
         reachedEnd = false;
     }
 
+    public void setHome(boolean home) {
+        isHome = home;
+    }
+
+    public void setReachedEnd(boolean reachedEnd) {
+        this.reachedEnd = reachedEnd;
+    }
+
     public Color getColor(){
         return figureColor;
-    }
-    public int getFieldIndex(){
-        return position;
     }
     public boolean isRunning(){
         return !isHome && !reachedEnd;
