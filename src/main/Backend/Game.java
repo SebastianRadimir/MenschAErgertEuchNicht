@@ -41,6 +41,8 @@ public class Game extends JPanel {
                     return;
                 }
                 f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
+                repaint();
+                updateUI();
 
             }
 
