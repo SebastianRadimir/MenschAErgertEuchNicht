@@ -23,7 +23,7 @@ public class Board {
 
             double ni = circlePrecisionInterval*i;
 
-            double pn = Math.max((Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0),(Math.sqrt(playerAmount)*(circleSize/4.0)));
+            double pn = getBoardShape(ni);
             courseLineArrX[i] = (int)((Math.cos(ni)*pn) + boardCenterX);
             courseLineArrY[i] = (int)((Math.sin(ni)*pn) + boardCenterY);
 
@@ -35,7 +35,7 @@ public class Board {
         for (int i = 3; i < (playerAmount*fieldPerPerson)+3; i++) {
             double ni = div*(i+0.5);
 
-            double pn = Math.max((Math.sin(ni*playerAmount)+1.2)*(circleSize/2.0),(Math.sqrt(playerAmount)*(circleSize/4.0)));
+            double pn = getBoardShape(ni);
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
     }
