@@ -1,5 +1,6 @@
 package GuiStuff;
 
+import java.io.*;
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ public class WelcomeGUI extends JFrame {
     private JComboBox AnzahlSpielfelderText;
 
     private JPanel MainPanel;
+    private JButton Rules;
 
     private int AnzahlSpielfelder;
     private int anzahlSpieler;
@@ -51,7 +53,17 @@ public class WelcomeGUI extends JFrame {
                 }
             }
         });
+        Rules.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource() == Rules) {
+                        NewWindow ruleWindow = new NewWindow();
+                }
+            }
+        });
+
     }
+
 
     public static void main(String[] args) {
         try {
