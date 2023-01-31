@@ -7,7 +7,7 @@ import java.util.Random;
 import static GuiStuff.Settings.*;
 import static java.lang.Math.min;
 
-public class Board extends JPanel {
+public class TempBoard extends JPanel {
     private int randX;
     private int randY;
     private int playerAmount;
@@ -29,7 +29,7 @@ public class Board extends JPanel {
     private int[] xPlayerPos;
     private int[] yPlayerPos;
     private int playerDistance = min(xOffset-100,yOffset-100);
-    public Board(int playerAmount, int figureAmount) {
+    public TempBoard(int playerAmount, int figureAmount) {
         this.playerAmount = playerAmount;
         this.figureAmount = figureAmount;
 
