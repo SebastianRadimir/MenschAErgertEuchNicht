@@ -21,7 +21,7 @@ public class DiceDialogManager extends JComponent implements Accessible {
 
         dialog.addComponentListener(new DisposeOnClose());
 
-        dialog.show(); // blocks until user brings dialog down...
+        dialog.show();
 
         return ok.getDiceVal();
     }
@@ -89,12 +89,8 @@ class DiceDialog extends JDialog {
         String cancelString = UIManager.getString("ColorChooser.cancelText", locale);
 
         Container contentPane = getContentPane();
-        contentPane.setLayout(new BorderLayout());
-        contentPane.add(chooserPane, BorderLayout.CENTER);
+        contentPane.add(this.chooserPane);
 
-        JPanel buttonPane = new JPanel();
-        buttonPane.setLayout(new FlowLayout(FlowLayout.CENTER));
-        buttonPane.setBackground(Settings.board_bg_color);
         JButton okButton = new JButton(okString);
         getRootPane().setDefaultButton(okButton);
         okButton.getAccessibleContext().setAccessibleDescription(okString);
@@ -109,7 +105,7 @@ class DiceDialog extends JDialog {
         if (okListener != null) {
             okButton.addActionListener(okListener);
         }
-        buttonPane.add(okButton);
+        this.chooserPane.setOKButton(okButton);
 
         cancelButton = new JButton(cancelString);
         cancelButton.getAccessibleContext().setAccessibleDescription(cancelString);
@@ -136,8 +132,6 @@ class DiceDialog extends JDialog {
         }
         //buttonPane.add(cancelButton);
 
-        contentPane.add(buttonPane, BorderLayout.SOUTH);
-
         if (JDialog.isDefaultLookAndFeelDecorated()) {
             boolean supportsWindowDecorations =
                     UIManager.getLookAndFeel().getSupportsWindowDecorations();
@@ -148,6 +142,7 @@ class DiceDialog extends JDialog {
         pack();
 
         this.addWindowListener(new DiceDialog.Closer());
+
     }
 
     @SuppressWarnings("deprecation")
