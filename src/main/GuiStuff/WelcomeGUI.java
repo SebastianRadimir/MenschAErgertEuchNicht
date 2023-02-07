@@ -1,15 +1,11 @@
 package GuiStuff;
 
-import java.io.*;
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class WelcomeGUI extends JFrame {
-    private JTextField AnzahlSpielfigurenText;
-    private JTextField AnzSpielerText;
-
     private JLabel AnzSpieler;
     private JLabel AnzSpielfiguren;
     private JLabel AnzSpielfelder;
@@ -18,19 +14,23 @@ public class WelcomeGUI extends JFrame {
 
     private JComboBox AnzahlSpielfelderText;
 
+    private JComboBox anzahlDerSpielfiguren;
+
+    private JComboBox anzahlDerSpieler;
+
     private JPanel MainPanel;
     private JButton Rules;
 
     private int AnzahlSpielfelder;
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
-    private int anzahlSpielfelder;
 
     public WelcomeGUI() {
         setContentPane(MainPanel);
-        AnzahlSpielfelderText.setSelectedIndex(-1);
-        AnzahlSpielfigurenText.setText("");
-        AnzSpielerText.setText("");
+        AnzahlSpielfelderText.setSelectedIndex(7);
+        anzahlDerSpielfiguren.setSelectedIndex(3);
+        anzahlDerSpieler.setSelectedIndex(2);
+
         setTitle("Mensch ärgere dich nicht");
         setSize(400, 300);
         setLocationRelativeTo(null);
@@ -40,16 +40,16 @@ public class WelcomeGUI extends JFrame {
         StartGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (AnzahlSpielfigurenText.getText().equals("") || AnzSpielerText.getText().equals("") || AnzahlSpielfelderText.getSelectedIndex() == -1) { // || containsOnlyValues(AnzSpielerText) || containsOnlyValues(AnzahlSpielfigurenText)
+                if (AnzahlSpielfelderText.getSelectedIndex() == -1 || anzahlDerSpieler.getSelectedIndex() == -1 || anzahlDerSpielfiguren.getSelectedIndex() == -1) { // || containsOnlyValues(AnzSpielerText) || containsOnlyValues(AnzahlSpielfigurenText)
                     JOptionPane.showMessageDialog(null, "Fehlerhafte Eingabe");
                 } else {
-                    anzahlSpielfiguren = Integer.parseInt(AnzahlSpielfigurenText.getText());
-                    anzahlSpieler = Integer.parseInt(AnzSpielerText.getText());
+                    anzahlSpielfiguren = Integer.parseInt(anzahlDerSpielfiguren.getSelectedItem().toString().trim());
+                    anzahlSpieler = Integer.parseInt(anzahlDerSpieler.getSelectedItem().toString().trim());
                     AnzahlSpielfelder = Integer.parseInt(AnzahlSpielfelderText.getSelectedItem().toString().trim());
 
-                    AnzahlSpielfigurenText.setText("");
-                    AnzSpielerText.setText("");
-                    AnzahlSpielfelderText.setSelectedIndex(-1);
+                    anzahlDerSpielfiguren.setSelectedIndex(3);
+                    anzahlDerSpieler.setSelectedIndex(2);
+                    AnzahlSpielfelderText.setSelectedIndex(7);
                 }
             }
         });
@@ -64,7 +64,6 @@ public class WelcomeGUI extends JFrame {
 
     }
 
-
     public static void main(String[] args) {
         try {
             for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -78,11 +77,4 @@ public class WelcomeGUI extends JFrame {
         }
         new WelcomeGUI();
     }
-
-//   private boolean containsOnlyValues(JTextField field){
-//       if (field.getText().matches(".*[a-z].*")) {
-//           return false;
-//       }
-//       return true;
-//   }
 }
