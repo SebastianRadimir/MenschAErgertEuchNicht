@@ -21,7 +21,7 @@ public class WelcomeGUI extends JFrame {
     private JPanel MainPanel;
     private JButton Rules;
 
-    private int AnzahlSpielfelder;
+    private int anzahlSpielfelder;
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
 
@@ -45,7 +45,7 @@ public class WelcomeGUI extends JFrame {
                 } else {
                     anzahlSpielfiguren = Integer.parseInt(anzahlDerSpielfiguren.getSelectedItem().toString().trim());
                     anzahlSpieler = Integer.parseInt(anzahlDerSpieler.getSelectedItem().toString().trim());
-                    AnzahlSpielfelder = Integer.parseInt(AnzahlSpielfelderText.getSelectedItem().toString().trim());
+                    anzahlSpielfelder = Integer.parseInt(AnzahlSpielfelderText.getSelectedItem().toString().trim());
 
                     anzahlDerSpielfiguren.setSelectedIndex(3);
                     anzahlDerSpieler.setSelectedIndex(2);
@@ -76,5 +76,17 @@ public class WelcomeGUI extends JFrame {
             // If Nimbus is not available, you can set the GUI to another look and feel.
         }
         new WelcomeGUI();
+    }
+
+    public int getAnzahlSpielfelder(){
+        return anzahlSpielfelder;
+    }
+
+    public int getAnzahlSpieler(){
+        return anzahlSpieler;
+    }
+
+    public int getAnzahlSpielfiguren(){
+        return anzahlSpielfiguren;
     }
 }
