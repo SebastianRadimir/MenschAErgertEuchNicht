@@ -24,6 +24,8 @@ public class Settings {
     public static Color board_tile_color = new Color(206, 171, 96);
     public static Color highlight_color = new Color(42, 187, 220);
     public static Color text_color = new Color(0, 0, 0);
+    public static Color dice_BG_color = new Color(255, 255, 255);
+    public static Color dice_selection_color = new Color(255, 0, 0);
 
     public static double getBoardShape(double angle){
         return Math.max((Math.sin(angle*playerAmount)+1.2)*(circleSize/2.0),(Math.sqrt(playerAmount)*(circleSize/4.0))); // Board als Blume

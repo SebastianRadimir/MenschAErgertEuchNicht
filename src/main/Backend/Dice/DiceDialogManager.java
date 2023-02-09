@@ -21,6 +21,13 @@ public class DiceDialogManager extends JComponent implements Accessible {
 
         dialog.addComponentListener(new DisposeOnClose());
 
+        dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        for (WindowListener wl : dialog.getWindowListeners()) {
+            dialog.removeWindowListener(wl);
+        }
+
+        dialog.setAlwaysOnTop(true);
+        dialog.setResizable(false);
         dialog.show();
 
         return ok.getDiceVal();
@@ -100,12 +107,14 @@ class DiceDialog extends JDialog {
             @SuppressWarnings("deprecation")
             public void actionPerformed(ActionEvent e) {
                 hide();
+                dispose();
             }
         });
         if (okListener != null) {
             okButton.addActionListener(okListener);
         }
         this.chooserPane.setOKButton(okButton);
+        this.chooserPane.addDialog(this);
 
         cancelButton = new JButton(cancelString);
         cancelButton.getAccessibleContext().setAccessibleDescription(cancelString);
@@ -118,19 +127,6 @@ class DiceDialog extends JDialog {
             inputMap.put(cancelKeyStroke, "cancel");
             //actionMap.put("cancel", cancelKeyAction);
         }
-        // end esc handling
-
-        cancelButton.setActionCommand("cancel");
-        cancelButton.addActionListener(new ActionListener() {
-            @SuppressWarnings("deprecation")
-            public void actionPerformed(ActionEvent e) {
-                hide();
-            }
-        });
-        if (cancelListener != null) {
-            cancelButton.addActionListener(cancelListener);
-        }
-        //buttonPane.add(cancelButton);
 
         if (JDialog.isDefaultLookAndFeelDecorated()) {
             boolean supportsWindowDecorations =
@@ -141,8 +137,6 @@ class DiceDialog extends JDialog {
         }
         pack();
 
-        this.addWindowListener(new DiceDialog.Closer());
-
     }
 
     @SuppressWarnings("deprecation")
@@ -151,11 +145,11 @@ class DiceDialog extends JDialog {
         super.show();
     }
 
-    @SuppressWarnings("serial") // JDK-implementation class
+    @SuppressWarnings("serial")
+    static // JDK-implementation class
     class Closer extends WindowAdapter implements Serializable{
         @SuppressWarnings("deprecation")
         public void windowClosing(WindowEvent e) {
-            cancelButton.doClick(0);
             Window w = e.getWindow();
             w.hide();
         }
