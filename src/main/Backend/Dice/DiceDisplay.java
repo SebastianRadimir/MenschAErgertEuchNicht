@@ -24,11 +24,10 @@ public class DiceDisplay extends JPanel {
         setSize(Settings.board_width,Settings.board_height/10);
 
         diceVal = new Random().nextInt(1,7);
-        scrollDecelerate = (new Random().nextInt(975,990))/1000.0;
+        scrollDecelerate = (new Random().nextInt(985,990))/1000.0;
         initSpeed = new Random().nextInt(100,300);
 
         int diceAmount = 8+((int)(initSpeed/3));
-        System.out.println(diceAmount);
 
         dss = new DicePanel[diceAmount];
         for (int i = 0; i < diceAmount; i++) {
@@ -54,13 +53,7 @@ public class DiceDisplay extends JPanel {
     private void runAnimation(){
         offset+=(initSpeed*scrollDecelerate);
         initSpeed*=scrollDecelerate;
-        if (initSpeed<=0.1){
-
-            int index = ((int)(offset)/this.getHeight())+4;
-            System.out.println(index);
-            if (index<dss.length) {
-                diceVal = dss[index].getPoints();
-            }
+        if (initSpeed<=0.3){
             emulateFinal();
         }
     }
@@ -69,6 +62,13 @@ public class DiceDisplay extends JPanel {
         t.stop();
 
         t=null;
+
+        int index = ((int)(offset)/this.getHeight())+4;
+        if (index<dss.length) {
+            diceVal = dss[index].getPoints();
+
+        }
+
         ddl.addWindowListener(new DiceDialog.Closer());
         acceptButton.doClick();
     }
@@ -77,7 +77,6 @@ public class DiceDisplay extends JPanel {
     public void paintComponent(Graphics g){
 
         g.setColor(Settings.board_bg_color);
-
         g.fillRect(0,0,this.getWidth(),this.getHeight());
 
         int ySize = this.getHeight();
