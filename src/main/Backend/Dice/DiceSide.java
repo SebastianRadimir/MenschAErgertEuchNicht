@@ -144,7 +144,7 @@ public enum DiceSide {
         w = minsize;
         h = minsize;
 
-        int barSize = h/10;
+        int barSize = h/5;
 
         g.setColor(Settings.dice_BG_color);
 
