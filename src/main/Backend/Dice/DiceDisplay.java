@@ -24,10 +24,11 @@ public class DiceDisplay extends JPanel {
         setSize(Settings.board_width,Settings.board_height/10);
 
         diceVal = new Random().nextInt(1,7);
-        scrollDecelerate = (new Random().nextInt(97,99))/100.0;
-        initSpeed = new Random().nextInt(1,200);
+        scrollDecelerate = (new Random().nextInt(975,990))/1000.0;
+        initSpeed = new Random().nextInt(100,300);
 
-        int diceAmount = 8+((int)(initSpeed*scrollDecelerate));
+        int diceAmount = 8+((int)(initSpeed/3));
+        System.out.println(diceAmount);
 
         dss = new DicePanel[diceAmount];
         for (int i = 0; i < diceAmount; i++) {
@@ -56,6 +57,7 @@ public class DiceDisplay extends JPanel {
         if (initSpeed<=0.1){
 
             int index = ((int)(offset)/this.getHeight())+4;
+            System.out.println(index);
             if (index<dss.length) {
                 diceVal = dss[index].getPoints();
             }
