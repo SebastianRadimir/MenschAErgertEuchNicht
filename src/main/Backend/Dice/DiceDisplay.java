@@ -78,7 +78,6 @@ public class DiceDisplay extends JPanel {
 
         g.fillRect(0,0,this.getWidth(),this.getHeight());
 
-        int xSize = this.getHeight();
         int ySize = this.getHeight();
 
         int i = 0;
@@ -88,7 +87,9 @@ public class DiceDisplay extends JPanel {
         }
 
         g.setColor(Settings.dice_selection_color);
-        g.drawLine(ySize*4, 0, ySize*4, ySize);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(6));
+        g2.drawLine(ySize*4, 0, ySize*4, ySize);
 
     }
 

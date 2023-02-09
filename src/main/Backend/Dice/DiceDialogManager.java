@@ -102,7 +102,12 @@ class DiceDialog extends JDialog {
         getRootPane().setDefaultButton(okButton);
         okButton.getAccessibleContext().setAccessibleDescription(okString);
         okButton.setActionCommand("OK");
-        okButton.setForeground(Settings.text_color);
+        okButton.addActionListener(new ActionListener() {
+            @SuppressWarnings("deprecation")
+            public void actionPerformed(ActionEvent e) {
+                hide();
+            }
+        });
         if (okListener != null) {
             okButton.addActionListener(okListener);
         }
