@@ -46,10 +46,10 @@ public class DiceDialogManager extends JComponent implements Accessible {
         Window window = getWindowForComponent(null);
         DiceDialog dialog;
         if (window instanceof Frame) {
-            dialog = new DiceDialog((Frame)window, title, true, chooserPane,
+            dialog = new DiceDialog((Frame)window, title, chooserPane,
                     okListener, null);
         } else {
-            dialog = new DiceDialog((Dialog)window, title, true, chooserPane,
+            dialog = new DiceDialog((Dialog)window, title, chooserPane,
                     okListener, null);
         }
         dialog.getAccessibleContext().setAccessibleDescription(title);
@@ -69,19 +69,19 @@ class DiceDialog extends JDialog {
     private DiceDisplay chooserPane;
     private JButton cancelButton;
 
-    public DiceDialog(Dialog owner, String title, boolean modal,
+    public DiceDialog(Dialog owner, String title,
                       DiceDisplay chooserPane,
                       ActionListener okListener, ActionListener cancelListener)
             throws HeadlessException {
-        super(owner, title, modal);
+        super(owner, title, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         initColorChooserDialog(chooserPane, okListener, cancelListener);
     }
 
-    public DiceDialog(Frame owner, String title, boolean modal,
+    public DiceDialog(Frame owner, String title,
                       DiceDisplay chooserPane,
                       ActionListener okListener, ActionListener cancelListener)
             throws HeadlessException {
-        super(owner, title, modal);
+        super(owner, title, java.awt.Dialog.ModalityType.TOOLKIT_MODAL);
         initColorChooserDialog(chooserPane, okListener, cancelListener);
     }
 
@@ -103,13 +103,6 @@ class DiceDialog extends JDialog {
         okButton.getAccessibleContext().setAccessibleDescription(okString);
         okButton.setActionCommand("OK");
         okButton.setForeground(Settings.text_color);
-        okButton.addActionListener(new ActionListener() {
-            @SuppressWarnings("deprecation")
-            public void actionPerformed(ActionEvent e) {
-                hide();
-                dispose();
-            }
-        });
         if (okListener != null) {
             okButton.addActionListener(okListener);
         }
