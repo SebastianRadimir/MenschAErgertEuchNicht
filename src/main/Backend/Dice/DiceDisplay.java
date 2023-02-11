@@ -27,7 +27,10 @@ public class DiceDisplay extends JPanel {
         scrollDecelerate = (new Random().nextInt(985,990))/1000.0;
         initSpeed = new Random().nextInt(100,300);
 
-        int diceAmount = 8+((int)(initSpeed/3));
+        //scrollDecelerate = 0.99;
+        //initSpeed = 300;
+
+        int diceAmount = 8+((int)(initSpeed));
 
         dss = new DicePanel[diceAmount];
         for (int i = 0; i < diceAmount; i++) {
