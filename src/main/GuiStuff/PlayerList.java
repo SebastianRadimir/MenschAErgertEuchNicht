@@ -1,5 +1,6 @@
 package GuiStuff;
 
+import Backend.Figure;
 import Backend.Player;
 
 import javax.swing.*;
@@ -38,9 +39,15 @@ public class PlayerList extends JPanel {
         for (Player player:playerlist) {
             JLabel label = new JLabel(player.getPlayerName());
             add(label);
+            int figureThatAreHome = 0;
+            Figure[] figureList = player.getFigures();
+            for(Figure figureSingle:figureList){
+                if(figureSingle.isHome()){
+                    figureThatAreHome += 1;
+                }
+            }
 
-
-            JLabel labelFigureHome = new JLabel(player.getPlayerIndex() + "/" + player.getFigures().length);
+            JLabel labelFigureHome = new JLabel(figureThatAreHome + "/" + player.getFigures().length);
             add(labelFigureHome);
         }
     }
@@ -50,7 +57,7 @@ public class PlayerList extends JPanel {
         JFrame frame = new JFrame();
 
         ArrayList<Player> listOfPlayer = new ArrayList<>();
-        for( int i = 1; i <= 4; i++){
+        for( int i = 1; i <= 6; i++){
             listOfPlayer.add(new Player(i,5,Color.WHITE,"Player " + i));
         }
 

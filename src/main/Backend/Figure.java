@@ -28,6 +28,14 @@ public class Figure{
     public boolean isRunning(){
         return !isHome && !reachedEnd;
     }
+
+    /***
+     * returns a boolean of the figure,
+     * only true if figure is still at home
+     */
+    public boolean isHome(){
+        return isHome && !reachedEnd;
+    }
     public boolean inFinishLine(){
         return reachedEnd;
     }
