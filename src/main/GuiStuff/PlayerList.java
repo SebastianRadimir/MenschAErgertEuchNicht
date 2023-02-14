@@ -38,7 +38,8 @@ public class PlayerList extends JPanel {
 
         for (Player player:playerlist) {
             JLabel label = new JLabel(player.getPlayerName());
-            add(label);
+            label.setBackground(Color.GREEN);
+
             int figureThatAreHome = 0;
             Figure[] figureList = player.getFigures();
             for(Figure figureSingle:figureList){
@@ -48,6 +49,7 @@ public class PlayerList extends JPanel {
             }
 
             JLabel labelFigureHome = new JLabel(figureThatAreHome + "/" + player.getFigures().length);
+            add(label);
             add(labelFigureHome);
         }
     }
