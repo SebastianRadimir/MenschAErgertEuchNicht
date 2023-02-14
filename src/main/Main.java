@@ -19,7 +19,7 @@ public class Main {
 
         board_width = size.width;
         board_height = size.height;
-        fieldPerPerson = 10;  // max 20
+        fieldPerPerson = 10;  // max 10
         playerAmount = 4;  // max 20
         figureAmount = 4;  // max 25
 
