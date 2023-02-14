@@ -42,7 +42,7 @@ public class PlayerList extends JPanel {
     //Functions-----------------------------------------
     private void createPanel(){
         setLayout(new GridLayout(playerlist.length + 1,1));
-        setBackground(Color.gray);
+        setBackground(defaultBackground);
 
         JPanel topPanel = new JPanel(new GridLayout(1,2));
         topPanel.add(new JLabel("Spielerliste"));
@@ -84,6 +84,14 @@ public class PlayerList extends JPanel {
                 panel.setBackground(new Color(0,150,0));
             }
         }
+    }
+
+    /**
+     * allaws to set the defaultBackgroundColor
+     * @param defaultColor Color Object
+     */
+    public void setDefaultBackground(Color defaultColor){
+        defaultBackground = defaultColor;
     }
 
 
