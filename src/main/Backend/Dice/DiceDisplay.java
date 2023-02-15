@@ -4,8 +4,6 @@ import GuiStuff.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class DiceDisplay extends JPanel {
@@ -16,8 +14,8 @@ public class DiceDisplay extends JPanel {
     private boolean toggleDiceColor;
     private JButton acceptButton;
 
-    private DicePanel[] dss;
-    private double scrollDecelerate;
+    private final DicePanel[] dss;
+    private final double scrollDecelerate;
     private double initSpeed;
     private double offset;
     private int endTimer, index;
@@ -39,11 +37,9 @@ public class DiceDisplay extends JPanel {
             dss[i]=new DicePanel();
         }
 
-        t = new Timer(10, new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                runAnimation();
-                repaint();
-            }
+        t = new Timer(10, ae -> {
+            runAnimation();
+            repaint();
         });
         t.start();
 
@@ -77,11 +73,9 @@ public class DiceDisplay extends JPanel {
 
         if (selectedDD != null) {
             endTimer = 0;
-            t = new Timer(100, new ActionListener() {
-                public void actionPerformed(ActionEvent ae) {
-                    selectAnimation();
-                    repaint();
-                }
+            t = new Timer(100, ae -> {
+                selectAnimation();
+                repaint();
             });
             t.start();
         }else {
@@ -110,33 +104,32 @@ public class DiceDisplay extends JPanel {
 
         if (!toggleDiceColor) {
             g.setColor(Settings.board_bg_color);
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-            int ySize = this.getHeight();
+            int xSize = this.getWidth();
+            int val = this.getHeight();
+            g.fillRect(0, 0, xSize, val);
 
             int i = 0;
             for (DicePanel dp : dss) {
-                dp.draw(g, (i * ySize) - (int) (offset), 0, ySize, ySize);
+                dp.draw(g, (i * val) - (int) (offset), 0, val, val);
                 i++;
             }
 
             g.setColor(Settings.dice_selection_color);
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(new BasicStroke(6));
-            g2.drawLine(ySize * 4, 0, ySize * 4, ySize);
+            g2.drawLine(val * 4, 0, val * 4, val);
         }else {
 
             g.setColor(Settings.board_bg_color);
-            int xSize = this.getWidth();
-            int ySize = this.getHeight();
-            g.fillRect(0,0,this.getWidth(),ySize);
+            int val = this.getHeight();
+            g.fillRect(0,0,this.getWidth(),val);
 
-            selectedDD.draw(g, (index * ySize) - (int) (offset), 0, ySize, ySize);
+            selectedDD.draw(g, (index * val) - (int) (offset), 0, val, val);
 
             g.setColor(Settings.dice_selection_color);
             Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(new BasicStroke(6));
-            g2.drawLine(ySize * 4, 0, ySize * 4, ySize);
+            g2.drawLine(val * 4, 0, val * 4, val);
 
         }
     }
