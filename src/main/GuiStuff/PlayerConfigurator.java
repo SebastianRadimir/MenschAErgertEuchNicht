@@ -13,21 +13,20 @@ import java.util.Random;
 
 import javax.swing.*;
 
-import static GuiStuff.Settings.*;
-import static GuiStuff.Settings.figureAmount;
-
 public class PlayerConfigurator extends JFrame
 {
     private int numPlayers;
     private int figureAmount;
+    private int fieldPerPerson;
     private final Color[] color;
     private final JTextField[] playerNameFields;
     private final JButton[] colorButtons;
 
-    public PlayerConfigurator(int pNumPlayers, int pFigureAmount)
+    public PlayerConfigurator(int pNumPlayers, int pFigureAmount, int pFieldPerPerson)
     {
         numPlayers = pNumPlayers;
         figureAmount = pFigureAmount;
+        fieldPerPerson = pFieldPerPerson;
         color = new Color[numPlayers];
         setTitle("Player Customization");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,6 +78,7 @@ public class PlayerConfigurator extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 dispose();
+                new WelcomeGUI();
             }
         });
 
@@ -167,14 +167,14 @@ public class PlayerConfigurator extends JFrame
         gameJFame.setUndecorated(true);
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
-        board_width = size.width;
-        board_height = size.height;
-        fieldPerPerson = 10;  // max 10
-        playerAmount = 4;  // max 20
-        figureAmount = 4;  // max 25
+        Settings.board_width = size.width;
+        Settings.board_height = size.height;
+        Settings.fieldPerPerson = this.fieldPerPerson;  // max 10
+        Settings.playerAmount = this.numPlayers;  // max 20
+        Settings.figureAmount = this.figureAmount;  // max 25
 
-        reload();
-        gameJFame.setSize(board_width,board_height);
+        Settings.reload();
+        gameJFame.setSize(Settings.board_width,Settings.board_height);
 
         gameJFame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -184,22 +184,6 @@ public class PlayerConfigurator extends JFrame
 
         gameJFame.setVisible(true);
     }
-
-
-    //public Color setColor(Color c, int i)
-    //{
-    //    this.color[i] = c;
-    //    return c;
-    //}
-
-    //public Player[] getPlayerArray(int anzahlSpieler, int anzahlSpielfiguren, String name[], Color color[]) {
-    //    Player[] ps = new Player[anzahlSpieler];
-    //    for (int i = 0; i < anzahlSpieler; i++)
-    //    {
-    //        p[i] = new Player(i, anzahlSpielfiguren, color[i], name[i]);
-    //    }
-    //   return p;
-    //}
 
 
     public static void main(String[] args)
