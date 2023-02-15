@@ -39,8 +39,8 @@ public class Player {
         maX = (int)(Math.cos(angle)*(dists+minDist)) + boardCenterX;
         maY = (int)(Math.sin(angle)*(dists+minDist)) + boardCenterY;
 
-        miX = (int)(Math.cos(angle)*(2.2*(circleSize/2.0))) + boardCenterX;
-        miY = (int)(Math.sin(angle)*(2.2*(circleSize/2.0))) + boardCenterY;
+        miX = (int)(Math.cos(angle)*getBoardShape(angle)) + boardCenterX;
+        miY = (int)(Math.sin(angle)*getBoardShape(angle)) + boardCenterY;
 
         home = new House(this, homeFields);
 
