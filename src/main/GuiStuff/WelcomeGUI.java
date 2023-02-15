@@ -1,5 +1,7 @@
 package GuiStuff;
 
+import Backend.Player;
+
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
@@ -46,6 +48,8 @@ public class WelcomeGUI extends JFrame {
                     anzahlSpielfiguren = Integer.parseInt(anzahlDerSpielfiguren.getSelectedItem().toString().trim());
                     anzahlSpieler = Integer.parseInt(anzahlDerSpieler.getSelectedItem().toString().trim());
                     anzahlSpielfelder = Integer.parseInt(AnzahlSpielfelderText.getSelectedItem().toString().trim());
+
+                    PlayerConfigurator pc = new PlayerConfigurator(anzahlSpieler, anzahlSpielfiguren);          //start Customizer
 
                     anzahlDerSpielfiguren.setSelectedIndex(3);
                     anzahlDerSpieler.setSelectedIndex(2);
