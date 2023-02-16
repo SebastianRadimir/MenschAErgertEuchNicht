@@ -96,33 +96,33 @@ public class PlayerConfigurator extends JFrame
             public void actionPerformed(ActionEvent e)
             {
                 boolean iName = invalidName();
-                boolean sColor = invalidColor();
-                if(iName || sColor)
+                boolean sColor = sameColor();
+
+                if(iName && sColor)
                 {
-                    if(iName && sColor)
-                    {
-                        JOptionPane.showMessageDialog(null, "Invalid Name and same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    else if(iName)
-                    {
-                        JOptionPane.showMessageDialog(null, "Invalid Name used!","Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                    else
-                    {
-                        JOptionPane.showMessageDialog(null, "Same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
-                    }
+                    JOptionPane.showMessageDialog(null, "Invalid Name and same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                else
+                if(iName)
                 {
-                    Player[] ps = new Player[numPlayers];
-                    for (int i = 0; i < numPlayers; i++)
-                    {
-                        ps[i] = new Player(i,figureAmount, color[i], playerNameFields[i].getText());
-                    }
-                    dispose();
-                    startGame(ps);
+                    JOptionPane.showMessageDialog(null, "Invalid Name used!","Error", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                //setVisible(false);
+                if (sColor)
+                {
+                    JOptionPane.showMessageDialog(null, "Same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+
+
+                Player[] ps = new Player[numPlayers];
+                for (int i = 0; i < numPlayers; i++)
+                {
+                    ps[i] = new Player(i,figureAmount, color[i], playerNameFields[i].getText());
+                }
+                dispose();
+                startGame(ps);
             }
         });
 
@@ -134,29 +134,29 @@ public class PlayerConfigurator extends JFrame
 
     private boolean invalidName()
     {
-        boolean emptyName = false;
         for(int n = 0; n < numPlayers; n++)
         {
             if(playerNameFields[n].getText().isBlank())
             {
-                emptyName = true;
-                break;
+                return true;
             }
         }
-        return emptyName;
+        return false;
     }
 
-    private boolean invalidColor()
+    private boolean sameColor()
     {
-        boolean sameColor = false;
         for(int n = 0; n < numPlayers - 1; n++)
         {
-            if(Objects.equals(color[n], color[n + 1]))
+            for(int i = n + 1; i < numPlayers; i++)
             {
-                sameColor = true;
+                if(Objects.equals(color[n], color[i]))
+                {
+                    return true;
+                }
             }
         }
-        return sameColor;
+        return false;
     }
 
     private void startGame(Player[] ps)
