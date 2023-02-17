@@ -10,12 +10,14 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
+    private Dice d;
     private final Board board;
     private int currentPlayerIndex;
 
     public Game(Board board){
         currentPlayerIndex = 0;
-
+        d = new Dice();
+        d.enableDice(3);
         this.board = board;
 
         this.addMouseMotionListener(new MouseMotionListener() {
@@ -97,6 +99,9 @@ public class Game extends JPanel {
         g.fillRect(0, 0, board_width + 10, board_height + 10);
 
         this.board.draw(g, xpos, ypos);
+
+
+
 
     }
 
