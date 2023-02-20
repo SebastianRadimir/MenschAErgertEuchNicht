@@ -17,8 +17,8 @@ public class PlayerList extends JPanel {
     private int widthOfWindow = 200;
     private final Player[] playerlist;
     private final ArrayList<JPanel> colorPanelList = new ArrayList<>();
-    private final String playerNameTitle = "Spielerliste";
-    private final String figuresAtHomeTitle = "Figuren Zuhause";
+    private String playerNameTitle = "Spielerliste";
+    private String figuresAtHomeTitle = "Figuren Zuhause";
     private final Color notPlayingColor = new Color(200,0,0);
     private final Color isPlayingColor = new Color(0,200,0);
     private Player actualPlayer;
@@ -29,9 +29,11 @@ public class PlayerList extends JPanel {
      * @param playerlist_p Array of all Players that need to be shown
      * @param heightPerPlayer_p Height per Player
      * @param widthOfWindow_p Width of the whole Window
+     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p){
+    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p,Color backgroundColor_p){
         playerlist = playerlist_p;
+        defaultBackground = backgroundColor_p;
         heightPerPlayer = heightPerPlayer_p;
         widthOfWindow = widthOfWindow_p;
         createPanel();
@@ -40,9 +42,11 @@ public class PlayerList extends JPanel {
     /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param players_p
+     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] players_p){
+    public PlayerList(Player[] players_p,Color backgroundColor_p){
         playerlist = players_p;
+        defaultBackground = backgroundColor_p;
         createPanel();
         actualPlayerUpdater();
     }
@@ -66,9 +70,9 @@ public class PlayerList extends JPanel {
             add(createRowWithPlayerAndStats(player.getColor(),player.getPlayerName(), figureThatAreHome + "/" + player.getFigures().length));
         }
     }
-
     private JPanel createRowWithPlayerAndStats(Color playerColor_p,String playerName_p,String figuresAtHome_p){
         JPanel rowPanel = new JPanel(new BorderLayout());
+        rowPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
 
         JPanel statusPanel = new JPanel();
         statusPanel.setName(playerName_p);
@@ -78,7 +82,7 @@ public class PlayerList extends JPanel {
         rowPanel.add(statusPanel,BorderLayout.LINE_START);
 
         JPanel nameAndStatsPanel = new JPanel(new GridLayout(1,2));
-        nameAndStatsPanel.setBorder(BorderFactory.createLineBorder(playerColor_p,3));
+        nameAndStatsPanel.setBorder(BorderFactory.createLineBorder(playerColor_p,5));
         nameAndStatsPanel.setBackground(defaultBackground);
 
         JLabel playerNameLabel = new JLabel(playerName_p);
@@ -100,12 +104,13 @@ public class PlayerList extends JPanel {
     }
     private void actualPlayerUpdater(){
         Runnable helloRunnable = new Runnable() {
+            @Override
             public void run() {
                 updateactuallPlayerColor();
             }
         };
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(helloRunnable, 1000, 1000, TimeUnit.MILLISECONDS);
+        executor.scheduleAtFixedRate(helloRunnable, 1000, 200, TimeUnit.MILLISECONDS);
     }
     private void updateactuallPlayerColor(){
         if(colorPanelList.get(0).getBackground() != actualPlayer.getColor()){
@@ -115,12 +120,6 @@ public class PlayerList extends JPanel {
                 }
             }
         }
-    }
-    /**
-     * repaints the Panel
-     */
-    public void repaintPanel(){
-        repaint();
     }
 
     /**
@@ -142,39 +141,42 @@ public class PlayerList extends JPanel {
     }
 
     /**
-     * allaws to set the defaultBackgroundColor
-     * @param defaultColor Color Object
-     */
-    public void setDefaultBackground(Color defaultColor){
-        defaultBackground = defaultColor;
-    }
-
-
-    /***
-     * new main function to test manuel the JPanel
+     * new main function to test manually the JPanel
      */
     public static void main (String[] args) throws InterruptedException {
         JFrame frame = new JFrame();
 
-        ArrayList<Player> listOfPlayer = new ArrayList<>();
+        Player[] listOfPlayer = new Player[3];
 
-        listOfPlayer.add(new Player(1,3,Color.WHITE,"Player 1"));
-        listOfPlayer.add(new Player(2,3,Color.GREEN,"Player 2"));
-        listOfPlayer.add(new Player(3,3,Color.RED,"Player 3"));
+        listOfPlayer[0] = new Player(1,3,Color.WHITE,"Player 1");
+        listOfPlayer[1] = new Player(2,3,Color.GREEN,"Player 2");
+        listOfPlayer[2] = new Player(3,3,Color.RED,"Player 3");
 
-        PlayerList test = new PlayerList(listOfPlayer.toArray(new Player[listOfPlayer.size()]));
+        PlayerList test = new PlayerList(listOfPlayer,Color.YELLOW);
         frame.add(test);
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        Thread t1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                test.setPlayerToGreen("Player 2");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                test.setPlayerToGreen("Player 3");
+            }
+        });
+        t1.start();
+        test.setPlayerToGreen("Player 1");
 
-
-        //my own "sleep" thing xD
-        Thread.sleep(5000);
-        test.setPlayerToGreen("Player 2");
-
-        Thread.sleep(5000);
-        test.setPlayerToGreen("Player 3");
 
     }
 }
