@@ -10,13 +10,13 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
-    private Dice d;
+    private DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
 
     public Game(Board board){
         currentPlayerIndex = 0;
-        d = new Dice();
+        d = new DiceGUI();
         d.enableDice(3);
         this.board = board;
 

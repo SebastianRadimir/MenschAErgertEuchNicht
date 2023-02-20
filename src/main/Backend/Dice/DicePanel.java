@@ -11,7 +11,7 @@ public class DicePanel extends JPanel {
     }
 
     public DicePanel(){
-        this(Backend.Dice.DiceSide.getRandomDiceSide());
+        this(DiceSide.getRandomDiceSide());
     }
     public int getPoints(){
         return ds.getPoints();

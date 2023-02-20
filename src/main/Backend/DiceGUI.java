@@ -5,12 +5,12 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class Dice extends JPanel {
+public class DiceGUI extends JPanel {
 
     private int canRoll;
     private int value = -1;
 
-    public Dice(){
+    public DiceGUI(){
         canRoll = 1;
         this.addMouseListener(new MouseListener() {
             @Override
