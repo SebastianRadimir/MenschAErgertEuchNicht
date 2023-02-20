@@ -22,7 +22,7 @@ public class PlayerList extends JPanel {
     private final Color notPlayingColor = new Color(200,0,0);
     private final Color isPlayingColor = new Color(0,200,0);
     private Player actualPlayer;
-    private Color defaultBackground = Color.WHITE;
+    private Color defaultBackground;
     //Constructor---------------------------------------
     /**
      * initilaze a PlayerList JPanel where every Player is listed
@@ -41,7 +41,7 @@ public class PlayerList extends JPanel {
 
     /**
      * initilaze a PlayerList JPanel where every Player is listed
-     * @param players_p
+     * @param players_p Array of all Players that need to be shown
      * @param backgroundColor_p The Color that the Background should use
      */
     public PlayerList(Player[] players_p,Color backgroundColor_p){
@@ -103,12 +103,7 @@ public class PlayerList extends JPanel {
         return y >= 128 ? Color.black : Color.white;
     }
     private void actualPlayerUpdater(){
-        Runnable helloRunnable = new Runnable() {
-            @Override
-            public void run() {
-                updateactuallPlayerColor();
-            }
-        };
+        Runnable helloRunnable = () -> updateactuallPlayerColor();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(helloRunnable, 1000, 200, TimeUnit.MILLISECONDS);
     }
@@ -143,7 +138,7 @@ public class PlayerList extends JPanel {
     /**
      * new main function to test manually the JPanel
      */
-    public static void main (String[] args) throws InterruptedException {
+    public static void main (String[] args) {
         JFrame frame = new JFrame();
 
         Player[] listOfPlayer = new Player[3];
@@ -157,22 +152,19 @@ public class PlayerList extends JPanel {
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-        Thread t1 = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                test.setPlayerToGreen("Player 2");
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                test.setPlayerToGreen("Player 3");
+        Thread t1 = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+            test.setPlayerToGreen("Player 2");
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            test.setPlayerToGreen("Player 3");
         });
         t1.start();
         test.setPlayerToGreen("Player 1");
