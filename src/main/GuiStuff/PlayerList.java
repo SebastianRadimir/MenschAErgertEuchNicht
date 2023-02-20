@@ -5,7 +5,6 @@ import Backend.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.CookieHandler;
 import java.util.ArrayList;
 
 public class PlayerList extends JPanel {
@@ -14,11 +13,11 @@ public class PlayerList extends JPanel {
     private int heightPerPlayer = 100;
     private int widthOfWindow = 200;
     private final Player[] playerlist;
-    private ArrayList<JPanel> playerPanelList = new ArrayList<>();
+    private final ArrayList<JPanel> playerPanelList = new ArrayList<>();
+    private final ArrayList<JPanel> colorPanelList;
     private Color defaultBackground = Color.WHITE;
     //Constructor---------------------------------------
-
-    /***
+    /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param playerlist_p
      * @param heightPerPlayer_p
@@ -31,7 +30,7 @@ public class PlayerList extends JPanel {
         createPanel();
     }
 
-    /***
+    /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param players_p
      */
@@ -41,21 +40,29 @@ public class PlayerList extends JPanel {
     }
     //Functions-----------------------------------------
     private void createPanel(){
-        setLayout(new GridLayout(playerlist.length + 1,1));
+        setLayout(new GridLayout(playerlist.length + 1,2));
         setBackground(defaultBackground);
 
-        JPanel topPanel = new JPanel(new GridLayout(1,2));
-        topPanel.add(new JLabel("Spielerliste"));
-        topPanel.add(new JLabel("Figuren Zuhause"));
+        JPanel topPanel = new JPanel(new BorderLayout());
+
+        JPanel actualPlayer = new JPanel();
+        actualPlayer.setSize(30,getHeight());
+        actualPlayer.setBackground(new Color(150,0,0));
+        topPanel.add(actualPlayer,BorderLayout.LINE_START);
+        topPanel.add(new JLabel("Spielerliste"),BorderLayout.CENTER);
+        topPanel.add(new JLabel("Figuren Zuhause   "),BorderLayout.LINE_END);
+
+
         add(topPanel);
 
         //add for every player a new row with name and maybe stats
         for (Player player:playerlist) {
-            JPanel playerPanel = new JPanel(new GridLayout(1,2));
+            JPanel playerPanel = new JPanel(new BorderLayout());
+            //JPanel playerPanel = new JPanel(new GridLayout(1,3));
             playerPanel.setName(player.getPlayerName());
 
             JLabel playerLabel = new JLabel(player.getPlayerName());
-            playerPanel.add(playerLabel);
+            playerPanel.add(playerLabel,BorderLayout.CENTER);
 
             int figureThatAreHome = 0;
             Figure[] figureList = player.getFigures();
@@ -65,12 +72,30 @@ public class PlayerList extends JPanel {
                 }
             }
 
-            JLabel labelFigureHome = new JLabel(figureThatAreHome + "/" + player.getFigures().length);
-            playerPanel.add(labelFigureHome);
+            add(createRowWithPlayerAndStats(player.getPlayerName(), figureThatAreHome + "/" + player.getFigures().length))
+            JLabel labelFigureHome = new JLabel();
+            playerPanel.add(labelFigureHome,BorderLayout.LINE_END);
 
             playerPanelList.add(playerPanel);
             add(playerPanel);
         }
+    }
+
+    private JPanel createRowWithPlayerAndStats(String playerName_p,String figuresAtHome){
+        JPanel rowPanel = new JPanel(new BorderLayout());
+
+        JPanel statusPanel = new JPanel();
+        statusPanel.setSize(30,rowPanel.getHeight());
+        statusPanel.setBackground(new Color(0,150,0));
+        rowPanel.add(statusPanel,BorderLayout.LINE_START);
+
+        JPanel nameAndStatsPanel = new JPanel(new GridLayout(1,2));
+        nameAndStatsPanel.add(new Label(playerName_p),BorderLayout.LINE_START);
+        nameAndStatsPanel.add(new Label(figuresAtHome),BorderLayout.CENTER);
+
+        rowPanel.add(nameAndStatsPanel,BorderLayout.CENTER);
+
+        return rowPanel;
     }
 
     /**
