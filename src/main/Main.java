@@ -1,5 +1,6 @@
 
 import Backend.*;
+import GuiStuff.WelcomeGUI;
 
 import javax.swing.*;
 
@@ -11,6 +12,9 @@ public class Main {
 
     public static void main(String[] args) {
 
+        new WelcomeGUI();
+
+        /*
         JFrame gameJFame = new JFrame("Game");
         gameJFame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         gameJFame.setResizable(false);
@@ -42,5 +46,6 @@ public class Main {
         //gameJFame.setBackground(board_bg_color);
 
         gameJFame.setVisible(true);
+        */
     }
 }

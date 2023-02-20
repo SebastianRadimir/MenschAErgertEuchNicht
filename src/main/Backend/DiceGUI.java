@@ -70,4 +70,7 @@ public class DiceGUI extends JPanel {
         }
 
     }
+    public int getValue(){
+        return value;
+    }
 }
