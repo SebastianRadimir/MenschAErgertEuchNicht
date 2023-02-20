@@ -6,6 +6,9 @@ import Backend.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerList extends JPanel {
 
@@ -13,15 +16,19 @@ public class PlayerList extends JPanel {
     private int heightPerPlayer = 100;
     private int widthOfWindow = 200;
     private final Player[] playerlist;
-    private final ArrayList<JPanel> playerPanelList = new ArrayList<>();
-    private final ArrayList<JPanel> colorPanelList;
+    private final ArrayList<JPanel> colorPanelList = new ArrayList<>();
+    private final String playerNameTitle = "Spielerliste";
+    private final String figuresAtHomeTitle = "Figuren Zuhause";
+    private final Color notPlayingColor = new Color(200,0,0);
+    private final Color isPlayingColor = new Color(0,200,0);
+    private Player actualPlayer;
     private Color defaultBackground = Color.WHITE;
     //Constructor---------------------------------------
     /**
      * initilaze a PlayerList JPanel where every Player is listed
-     * @param playerlist_p
-     * @param heightPerPlayer_p
-     * @param widthOfWindow_p
+     * @param playerlist_p Array of all Players that need to be shown
+     * @param heightPerPlayer_p Height per Player
+     * @param widthOfWindow_p Width of the whole Window
      */
     public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p){
         playerlist = playerlist_p;
@@ -37,33 +44,18 @@ public class PlayerList extends JPanel {
     public PlayerList(Player[] players_p){
         playerlist = players_p;
         createPanel();
+        actualPlayerUpdater();
     }
     //Functions-----------------------------------------
     private void createPanel(){
-        setLayout(new GridLayout(playerlist.length + 1,2));
+        setLayout(new GridLayout(playerlist.length + 1,1));
+        setSize(widthOfWindow,(playerlist.length + 1) * heightPerPlayer + 10);
         setBackground(defaultBackground);
 
-        JPanel topPanel = new JPanel(new BorderLayout());
+        add(createRowWithPlayerAndStats(defaultBackground,playerNameTitle,figuresAtHomeTitle));
 
-        JPanel actualPlayer = new JPanel();
-        actualPlayer.setSize(30,getHeight());
-        actualPlayer.setBackground(new Color(150,0,0));
-        topPanel.add(actualPlayer,BorderLayout.LINE_START);
-        topPanel.add(new JLabel("Spielerliste"),BorderLayout.CENTER);
-        topPanel.add(new JLabel("Figuren Zuhause   "),BorderLayout.LINE_END);
-
-
-        add(topPanel);
-
-        //add for every player a new row with name and maybe stats
+        //add for every player a new row with Statuscolor,Name and Figures at Home
         for (Player player:playerlist) {
-            JPanel playerPanel = new JPanel(new BorderLayout());
-            //JPanel playerPanel = new JPanel(new GridLayout(1,3));
-            playerPanel.setName(player.getPlayerName());
-
-            JLabel playerLabel = new JLabel(player.getPlayerName());
-            playerPanel.add(playerLabel,BorderLayout.CENTER);
-
             int figureThatAreHome = 0;
             Figure[] figureList = player.getFigures();
             for(Figure figureSingle:figureList){
@@ -71,42 +63,80 @@ public class PlayerList extends JPanel {
                     figureThatAreHome += 1;
                 }
             }
-
-            add(createRowWithPlayerAndStats(player.getPlayerName(), figureThatAreHome + "/" + player.getFigures().length))
-            JLabel labelFigureHome = new JLabel();
-            playerPanel.add(labelFigureHome,BorderLayout.LINE_END);
-
-            playerPanelList.add(playerPanel);
-            add(playerPanel);
+            add(createRowWithPlayerAndStats(player.getColor(),player.getPlayerName(), figureThatAreHome + "/" + player.getFigures().length));
         }
     }
 
-    private JPanel createRowWithPlayerAndStats(String playerName_p,String figuresAtHome){
+    private JPanel createRowWithPlayerAndStats(Color playerColor_p,String playerName_p,String figuresAtHome_p){
         JPanel rowPanel = new JPanel(new BorderLayout());
 
         JPanel statusPanel = new JPanel();
+        statusPanel.setName(playerName_p);
         statusPanel.setSize(30,rowPanel.getHeight());
-        statusPanel.setBackground(new Color(0,150,0));
+        statusPanel.setBackground(notPlayingColor);
+        colorPanelList.add(statusPanel);
         rowPanel.add(statusPanel,BorderLayout.LINE_START);
 
         JPanel nameAndStatsPanel = new JPanel(new GridLayout(1,2));
-        nameAndStatsPanel.add(new Label(playerName_p),BorderLayout.LINE_START);
-        nameAndStatsPanel.add(new Label(figuresAtHome),BorderLayout.CENTER);
+        nameAndStatsPanel.setBorder(BorderFactory.createLineBorder(playerColor_p,3));
+        nameAndStatsPanel.setBackground(defaultBackground);
+
+        JLabel playerNameLabel = new JLabel(playerName_p);
+        playerNameLabel.setForeground(invertColor(defaultBackground));
+        nameAndStatsPanel.add(playerNameLabel,BorderLayout.LINE_START);
+
+        JLabel figuresAtHomeLabel = new JLabel(figuresAtHome_p);
+        figuresAtHomeLabel.setForeground(invertColor(defaultBackground));
+        nameAndStatsPanel.add(figuresAtHomeLabel,BorderLayout.CENTER);
 
         rowPanel.add(nameAndStatsPanel,BorderLayout.CENTER);
 
         return rowPanel;
     }
+    private Color invertColor(Color c){
+        //Bruda akzeptier mal so #StackOverFlow
+        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000;
+        return y >= 128 ? Color.black : Color.white;
+    }
+    private void actualPlayerUpdater(){
+        Runnable helloRunnable = new Runnable() {
+            public void run() {
+                updateactuallPlayerColor();
+            }
+        };
+        ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
+        executor.scheduleAtFixedRate(helloRunnable, 1000, 1000, TimeUnit.MILLISECONDS);
+    }
+    private void updateactuallPlayerColor(){
+        if(colorPanelList.get(0).getBackground() != actualPlayer.getColor()){
+            for(JPanel panel:colorPanelList){
+                if(playerNameTitle.equals(panel.getName())){
+                    panel.setBackground(actualPlayer.getColor());
+                }
+            }
+        }
+    }
+    /**
+     * repaints the Panel
+     */
+    public void repaintPanel(){
+        repaint();
+    }
 
     /**
      * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor
-     * @param playerName insert the playername, u can use player.getName()
+     * @param playerName_p insert the playername, u can use player.getName()
      */
-    public void setPlayerToGreen(String playerName){
-        for(JPanel panel:playerPanelList){
-            panel.setBackground(defaultBackground);
-            if(playerName.equals(panel.getName())){
-                panel.setBackground(new Color(0,150,0));
+    public void setPlayerToGreen(String playerName_p){
+        for(JPanel panel:colorPanelList){
+            panel.setBackground(notPlayingColor);
+            if(playerName_p.equals(panel.getName())){
+                panel.setBackground(isPlayingColor);
+                for (Player p:playerlist) {
+                    if(p.getPlayerName().equals(playerName_p)){
+                        actualPlayer = p;
+                    }
+                }
             }
         }
     }
@@ -123,32 +153,28 @@ public class PlayerList extends JPanel {
     /***
      * new main function to test manuel the JPanel
      */
-    public static void main (String[] args){
+    public static void main (String[] args) throws InterruptedException {
         JFrame frame = new JFrame();
 
         ArrayList<Player> listOfPlayer = new ArrayList<>();
-        for( int i = 1; i <= 3; i++){
-            listOfPlayer.add(new Player(i,3,Color.WHITE,"Player " + i));
-        }
+
+        listOfPlayer.add(new Player(1,3,Color.WHITE,"Player 1"));
+        listOfPlayer.add(new Player(2,3,Color.GREEN,"Player 2"));
+        listOfPlayer.add(new Player(3,3,Color.RED,"Player 3"));
+
         PlayerList test = new PlayerList(listOfPlayer.toArray(new Player[listOfPlayer.size()]));
-
-
         frame.add(test);
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
 
-        /*
+
         //my own "sleep" thing xD
-        System.out.println("1 green");
-        test.setPlayerToGreen("Player 1");
-        int i = 0;
-        while (i <= 5000000){
-            i = i + 1;
-            System.out.println(i);
-        }
-        System.out.println("2 green");
+        Thread.sleep(5000);
         test.setPlayerToGreen("Player 2");
-        */
+
+        Thread.sleep(5000);
+        test.setPlayerToGreen("Player 3");
+
     }
 }
