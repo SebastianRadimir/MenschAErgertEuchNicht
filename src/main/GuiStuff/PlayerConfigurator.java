@@ -88,22 +88,19 @@ public class PlayerConfigurator extends JFrame{
         confirmButton.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
-                boolean iName = invalidName();
-                boolean sColor = sameColor();
 
-                if(iName && sColor){
-                    JOptionPane.showMessageDialog(null, "Invalid Name and same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                StringBuilder sb = new StringBuilder();
+                if(invalidName()){
+                    sb.append("\nInvalid Name used!");
                 }
-                if(iName){
-                    JOptionPane.showMessageDialog(null, "Invalid Name used!","Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-                if (sColor){
-                    JOptionPane.showMessageDialog(null, "Same Color used for multiple Players!","Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                if (sameColor()){
+                    sb.append("\n2 Players cannot have the same color!");
                 }
 
+                if (!sb.isEmpty()){
+                    JOptionPane.showMessageDialog(null, sb.toString(),"Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -165,21 +162,4 @@ public class PlayerConfigurator extends JFrame{
 
         gameJFame.setVisible(true);
     }
-
-
-    public static void main(String[] args){
-        try{
-            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()){
-                if ("Nimbus".equals(info.getName())){
-                    UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (Exception e){
-            // If Nimbus is not available, you can set the GUI to another look and feel.
-        }
-    }
 }
-
-
