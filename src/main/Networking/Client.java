@@ -74,7 +74,7 @@ public class Client {
             DataInputStream in = new DataInputStream(inFromServer);
             sendMessageToGame(in.readUTF());
         } catch (IOException e) {
-            sendErrorToGame("Failed to listen to the Server, Error: " + e);
+            //sendErrorToGame("Failed to listen to the Server, Error: " + e);
         }
     }
 
