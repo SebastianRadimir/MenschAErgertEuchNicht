@@ -29,11 +29,10 @@ public class PlayerList extends JPanel {
      * @param playerlist_p Array of all Players that need to be shown
      * @param heightPerPlayer_p Height per Player
      * @param widthOfWindow_p Width of the whole Window
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p,Color backgroundColor_p){
+    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p){
         playerlist = playerlist_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         heightPerPlayer = heightPerPlayer_p;
         widthOfWindow = widthOfWindow_p;
         createPanel();
@@ -42,11 +41,10 @@ public class PlayerList extends JPanel {
     /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param players_p Array of all Players that need to be shown
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] players_p,Color backgroundColor_p){
+    public PlayerList(Player[] players_p){
         playerlist = players_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         createPanel();
         actualPlayerUpdater();
     }
@@ -99,8 +97,7 @@ public class PlayerList extends JPanel {
     }
     private Color invertColor(Color c){
         //Bruda akzeptier mal so #StackOverFlow
-        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000;
-        return y >= 128 ? Color.black : Color.white;
+        return (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000.0 >= 128 ? Color.black : Color.white;
     }
     private void actualPlayerUpdater(){
         Runnable helloRunnable = () -> updateactuallPlayerColor();
@@ -134,41 +131,16 @@ public class PlayerList extends JPanel {
             }
         }
     }
-
     /**
-     * new main function to test manually the JPanel
+     * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor
+     * @param pIndex insert the player Index
      */
-    public static void main (String[] args) {
-        JFrame frame = new JFrame();
-
-        Player[] listOfPlayer = new Player[3];
-
-        listOfPlayer[0] = new Player(1,3,Color.WHITE,"Player 1");
-        listOfPlayer[1] = new Player(2,3,Color.GREEN,"Player 2");
-        listOfPlayer[2] = new Player(3,3,Color.RED,"Player 3");
-
-        PlayerList test = new PlayerList(listOfPlayer,Color.YELLOW);
-        frame.add(test);
-        frame.setSize(300,200);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        Thread t1 = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    public void setPlayerToGreen(int pIndex){
+        for(Player p: playerlist){
+            if (p.getPlayerIndex() == pIndex){
+                setPlayerToGreen(p.getPlayerName());
+                return;
             }
-            test.setPlayerToGreen("Player 2");
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            test.setPlayerToGreen("Player 3");
-        });
-        t1.start();
-        test.setPlayerToGreen("Player 1");
-
-
+        }
     }
 }

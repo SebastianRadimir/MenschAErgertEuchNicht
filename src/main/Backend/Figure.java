@@ -30,7 +30,7 @@ public class Figure{
     }
 
     /***
-     * returns a boolean of the figure,
+     * returns a boolean, of the figure,
      * only true if figure is still at home
      */
     public boolean isHome(){

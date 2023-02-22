@@ -1,5 +1,6 @@
 package Backend;
 
+import GuiStuff.PlayerList;
 import GuiStuff.Settings;
 
 import javax.swing.*;
@@ -15,13 +16,17 @@ public class Game extends JPanel {
     private DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
-
+    private PlayerList pl;
     public Game(Board board){
+        this.setLayout(null);
         currentPlayerIndex = 0;
         d = new DiceGUI();
         d.enableDice(3);
         this.board = board;
-
+        pl = new PlayerList(this.board.players);
+        pl.setPreferredSize(new Dimension(board_width/6, board_height));
+        pl.setPlayerToGreen(currentPlayerIndex);
+        this.add(pl);
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -36,18 +41,37 @@ public class Game extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                PointerInfo a = MouseInfo.getPointerInfo();
-                Point b = a.getLocation();
+                Point b = MouseInfo.getPointerInfo().getLocation();
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
                 if (f!=null){
-                    f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
-                    repaint();
-                    updateUI();
+
+                    if (d.getValue()==6 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied()) {
+                        f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
+
+                        getGame().remove(pl);
+
+                        pl = new PlayerList(board.players);
+                        pl.setPreferredSize(new Dimension(board_width/6, board_height));
+                        pl.setPlayerToGreen(currentPlayerIndex);
+                        getGame().add(pl);
+                        d.reset();
+
+                        repaint();
+                        updateUI();
+                    }else {
+                        if (d.getValue() != -1) {
+                            f.isOccupied();
+                            moveFigure(f,d.getValue());
+                            d.reset();
+                            repaint();
+                            updateUI();
+                        }
+                    }
                 }
 
-                if (((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
+                if (((Settings.board_width-(Settings.buttonSize*2))<xpos && xpos<Settings.board_width-Settings.buttonSize) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
                     d.roll();
                     repaint();
                     updateUI();
@@ -77,8 +101,12 @@ public class Game extends JPanel {
 
     }
 
+    private Game getGame(){
+        return this;
+    }
     public int nextPlayer(){
         currentPlayerIndex = (currentPlayerIndex+1)%board.playerAmount;
+        pl.setPlayerToGreen(currentPlayerIndex);
         return currentPlayerIndex;
     }
 
