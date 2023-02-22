@@ -13,10 +13,15 @@ public class DicePanel extends JPanel {
     public DicePanel(){
         this(DiceSide.getRandomDiceSide());
     }
+
     public int getPoints(){
         return ds.getPoints();
     }
     public void draw(Graphics g, int xMin, int yMin, int xSize, int ySize){
         ds.draw(g, xMin, yMin, xSize, ySize);
+    }
+
+    public void setSide(DiceSide newSide) {
+        ds = newSide;
     }
 }

@@ -26,6 +26,7 @@ public class Settings {
     public static Color text_color = new Color(0, 0, 0);
     public static Color dice_BG_color = new Color(255, 255, 255);
     public static Color dice_selection_color = new Color(255, 0, 0);
+    public static int buttonSize = fieldSize*3;
 
     public static double getBoardShape(double angle){
         return (Math.sin(angle*playerAmount)+2.0)*(circleSize/2.0);
@@ -33,11 +34,11 @@ public class Settings {
     }
 
     public static void reload(){
-
         boardCenterX = board_width/2;
         boardCenterY = board_height/2;
         circleSize = (int)min(boardCenterY*0.65,boardCenterX*0.65);
         fieldSize = (int)(((Math.pow(playerAmount,(-Math.E/4.0))/0.02))+8.0);
 
+        buttonSize = fieldSize*3;
     }
 }

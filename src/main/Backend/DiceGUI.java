@@ -1,5 +1,10 @@
 package Backend;
 
+import Backend.Dice.DiceDialogManager;
+import Backend.Dice.DicePanel;
+import Backend.Dice.DiceSide;
+import GuiStuff.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -8,39 +13,12 @@ import java.awt.event.MouseListener;
 public class DiceGUI extends JPanel {
 
     private int canRoll;
+    private DicePanel dp;
     private int value = -1;
 
     public DiceGUI(){
+        dp = new DicePanel(DiceSide.getRandomDiceSide());
         canRoll = 1;
-        this.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                roll();
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-
-
     }
 
     public void enableDice(int rollAmount){
@@ -53,21 +31,18 @@ public class DiceGUI extends JPanel {
 
     public void roll(){
         if (canRoll>=1) {
-            // set value to dice.show() thingy
-            // value = ...;
+            value = DiceDialogManager.showDialog();
+            dp = new DicePanel(DiceSide.getRandomDiceSide());
             canRoll =  value == 6?1: canRoll - 1; // if (value == 6 ) => 1 mal noch else => canRoll-1 mal rollen
+            dp.setSide(DiceSide.getSideByVal(value));
         }
 
     }
     @Override
     public void paintComponent(Graphics g){
 
-        if (canRoll>=1){
+            dp.draw(g, Settings.board_width-Settings.buttonSize,Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
 
-            // draw a dice side or someting lol
-
-
-        }
 
     }
     public int getValue(){
