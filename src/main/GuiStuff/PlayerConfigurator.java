@@ -93,6 +93,9 @@ public class PlayerConfigurator extends JFrame{
                 if(invalidName()){
                     sb.append("\nInvalid Name used!");
                 }
+                if (sameNames()){
+                    sb.append("\n2 Players cannot have the same Name!");
+                }
                 if (sameColor()){
                     sb.append("\n2 Players cannot have the same color!");
                 }
@@ -131,6 +134,16 @@ public class PlayerConfigurator extends JFrame{
         for(int n = 0; n < numPlayers; n++){
             if(playerNameFields[n].getText().isBlank()){
                 return true;
+            }
+        }
+        return false;
+    }
+    private boolean sameNames(){
+        for(int n = 0; n < numPlayers - 1; n++){
+            for(int i = n + 1; i < numPlayers; i++){
+                if(playerNameFields[n].getText().equals(playerNameFields[i].getText())){
+                    return true;
+                }
             }
         }
         return false;

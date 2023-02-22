@@ -30,7 +30,7 @@ public class DiceGUI extends JPanel {
     }
 
     public void roll(){
-        if (canRoll>=1) {
+        if (canRoll()) {
             value = DiceDialogManager.showDialog();
             dp = new DicePanel(DiceSide.getRandomDiceSide());
             canRoll =  value == 6?1: canRoll - 1; // if (value == 6 ) => 1 mal noch else => canRoll-1 mal rollen
@@ -40,10 +40,7 @@ public class DiceGUI extends JPanel {
     }
     @Override
     public void paintComponent(Graphics g){
-
-            dp.draw(g, Settings.board_width-Settings.buttonSize,Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
-
-
+        dp.draw(g, Settings.board_width-Settings.buttonSize,Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
     }
     public int getValue(){
         return value;
