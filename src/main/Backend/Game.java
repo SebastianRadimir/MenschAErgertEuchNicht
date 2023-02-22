@@ -1,5 +1,7 @@
 package Backend;
 
+import GuiStuff.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -39,13 +41,17 @@ public class Game extends JPanel {
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
-                if (f==null){
-                    return;
+                if (f!=null){
+                    f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
+                    repaint();
+                    updateUI();
                 }
-                f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
-                repaint();
-                updateUI();
 
+                if (((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
+                    d.roll();
+                    repaint();
+                    updateUI();
+                }
             }
 
             @Override
@@ -100,7 +106,7 @@ public class Game extends JPanel {
 
         this.board.draw(g, xpos, ypos);
 
-
+        d.paintComponent(g);
 
 
     }
