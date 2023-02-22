@@ -40,9 +40,13 @@ public class DiceGUI extends JPanel {
     }
     @Override
     public void paintComponent(Graphics g){
-        dp.draw(g, Settings.board_width-Settings.buttonSize,Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
+        dp.draw(g, Settings.board_width-(Settings.buttonSize*2),Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
     }
     public int getValue(){
         return value;
+    }
+
+    public void reset() {
+        value = -1;
     }
 }

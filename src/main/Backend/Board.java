@@ -73,8 +73,9 @@ public class Board {
         g2.setStroke(new BasicStroke(fieldSize/5.0f));
         for (int i = 0; i < playerAmount; i++) {
             g.setColor(players[i].getColor());
-            int x = course[i*fieldPerPerson].getX();
-            int y = course[i*fieldPerPerson].getY();
+            Field f = course[i*fieldPerPerson];
+            int x = f.getX();
+            int y = f.getY();
             g.drawOval(x - (fieldSize / 2),y - (fieldSize / 2), fieldSize, fieldSize);
         }
 
