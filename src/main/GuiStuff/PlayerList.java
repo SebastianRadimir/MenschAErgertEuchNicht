@@ -36,6 +36,7 @@ public class PlayerList extends JPanel {
         heightPerPlayer = heightPerPlayer_p;
         widthOfWindow = widthOfWindow_p;
         createPanel();
+        actualPlayerUpdater();
     }
 
     /**

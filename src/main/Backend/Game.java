@@ -13,7 +13,7 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
-    private DiceGUI d;
+    private final DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
     private PlayerList pl;
@@ -23,8 +23,7 @@ public class Game extends JPanel {
         d = new DiceGUI();
         d.enableDice(3);
         this.board = board;
-        pl = new PlayerList(this.board.players);
-        pl.setPreferredSize(new Dimension(board_width/6, board_height));
+        pl = new PlayerList(this.board.players, board_height/(this.board.players.length+1),board_width/6);
         pl.setPlayerToGreen(currentPlayerIndex);
         this.add(pl);
         this.addMouseMotionListener(new MouseMotionListener() {
@@ -52,8 +51,7 @@ public class Game extends JPanel {
 
                         getGame().remove(pl);
 
-                        pl = new PlayerList(board.players);
-                        pl.setPreferredSize(new Dimension(board_width/6, board_height));
+                        pl = new PlayerList(board.players, board_height/(board.players.length+1),board_width/6);
                         pl.setPlayerToGreen(currentPlayerIndex);
                         getGame().add(pl);
                         d.reset();
