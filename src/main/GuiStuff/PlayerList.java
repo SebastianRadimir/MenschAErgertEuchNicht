@@ -5,6 +5,7 @@ import Backend.Player;
 
 import javax.swing.*;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -17,6 +18,7 @@ public class PlayerList extends JPanel {
     private int widthOfWindow = 200;
     private final Player[] playerlist;
     private final ArrayList<JPanel> colorPanelList = new ArrayList<>();
+    private final ArrayList<JLabel> figuresAtHomeLabelList = new ArrayList<>();
     private String playerNameTitle = "Spielerliste";
     private String figuresAtHomeTitle = "Figuren Zuhause";
     private final Color notPlayingColor = new Color(200,0,0);
@@ -90,7 +92,9 @@ public class PlayerList extends JPanel {
         nameAndStatsPanel.add(playerNameLabel,BorderLayout.LINE_START);
 
         JLabel figuresAtHomeLabel = new JLabel(figuresAtHome_p);
+        figuresAtHomeLabel.setName(playerName_p);
         figuresAtHomeLabel.setForeground(invertColor(defaultBackground));
+        figuresAtHomeLabelList.add(figuresAtHomeLabel);
         nameAndStatsPanel.add(figuresAtHomeLabel,BorderLayout.CENTER);
 
         rowPanel.add(nameAndStatsPanel,BorderLayout.CENTER);
@@ -117,6 +121,7 @@ public class PlayerList extends JPanel {
         }
     }
 
+
     /**
      * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor
      * @param playerName_p insert the playername, u can use player.getName()
@@ -136,6 +141,34 @@ public class PlayerList extends JPanel {
     }
 
     /**
+     * will update the figures that are still home from the player that is given
+     * if the method is called
+     * @param playerName_p insert the Player.getPlayerName() for best use
+     */
+    public void updateFiguresAtHome(String playerName_p){
+        for (JLabel label :figuresAtHomeLabelList) {
+            if(label.getName().equals(playerName_p)){
+                //we found the Label we want to update
+
+                for (Player player: playerlist) {
+                    if(player.getPlayerName().equals(playerName_p)){
+                        //compare the playerName to the Player-class to get actual stats
+
+                        int figureThatAreHome = 0;
+                        Figure[] figureList = player.getFigures();
+                        for(Figure figureSingle:figureList){
+                            if(figureSingle.isHome()){
+                                figureThatAreHome += 1;
+                            }
+                        }
+                        label.setText(figureThatAreHome + "/" + player.getFigures().length);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * new main function to test manually the JPanel
      */
     public static void main (String[] args) {
@@ -147,7 +180,7 @@ public class PlayerList extends JPanel {
         listOfPlayer[1] = new Player(2,3,Color.GREEN,"Player 2");
         listOfPlayer[2] = new Player(3,3,Color.RED,"Player 3");
 
-        PlayerList test = new PlayerList(listOfPlayer,Color.YELLOW);
+        PlayerList test = new PlayerList(listOfPlayer,Color.BLACK);
         frame.add(test);
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
