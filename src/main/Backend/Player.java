@@ -77,4 +77,13 @@ public class Player {
         this.home.draw(g, mpx, mpy);
 
     }
+
+    public Figure getHomeFigure() {
+        for (int i = 0; i < figures.length; i++) {
+            if (figures[i].isHome()){
+                return figures[i];
+            }
+        }
+        return null;
+    }
 }

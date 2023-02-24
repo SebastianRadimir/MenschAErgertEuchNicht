@@ -31,24 +31,23 @@ public class PlayerList extends JPanel {
      * @param playerlist_p Array of all Players that need to be shown
      * @param heightPerPlayer_p Height per Player
      * @param widthOfWindow_p Width of the whole Window
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p,Color backgroundColor_p){
+    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p){
         playerlist = playerlist_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         heightPerPlayer = heightPerPlayer_p;
         widthOfWindow = widthOfWindow_p;
         createPanel();
+        actualPlayerUpdater();
     }
 
     /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param players_p Array of all Players that need to be shown
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] players_p,Color backgroundColor_p){
+    public PlayerList(Player[] players_p){
         playerlist = players_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         createPanel();
         actualPlayerUpdater();
     }
@@ -180,7 +179,7 @@ public class PlayerList extends JPanel {
         listOfPlayer[1] = new Player(2,3,Color.GREEN,"Player 2");
         listOfPlayer[2] = new Player(3,3,Color.RED,"Player 3");
 
-        PlayerList test = new PlayerList(listOfPlayer,Color.BLACK);
+        PlayerList test = new PlayerList(listOfPlayer);
         frame.add(test);
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

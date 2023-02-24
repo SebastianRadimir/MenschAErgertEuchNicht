@@ -28,6 +28,7 @@ public class Field{
     }
 
     public void setFigure(Figure f){
+        f.setHome(false);
         this.holdingFigure = f;
     }
 
