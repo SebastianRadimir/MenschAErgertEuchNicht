@@ -134,7 +134,7 @@ public enum DiceSide {
 
         g.setColor(Settings.dice_BG_color);
 
-        g.fillRect(xMin,yMin+barSize,yMin+w,h-(barSize*2));
+        g.fillRect(xMin,yMin+barSize,w,h-(barSize*2));
         g.fillRect(xMin+barSize,yMin,w-(barSize*2),h);
 
         g.fillOval(xMin,yMin,barSize*2,barSize*2);

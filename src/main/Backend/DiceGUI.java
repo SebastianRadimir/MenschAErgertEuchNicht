@@ -30,9 +30,9 @@ public class DiceGUI extends JPanel {
     }
 
     public void roll(){
+        dp.setSide(DiceSide.getRandomDiceSide());
         if (canRoll()) {
             value = DiceDialogManager.showDialog();
-            dp = new DicePanel(DiceSide.getRandomDiceSide());
             canRoll =  value == 6?1: canRoll - 1; // if (value == 6 ) => 1 mal noch else => canRoll-1 mal rollen
             dp.setSide(DiceSide.getSideByVal(value));
         }

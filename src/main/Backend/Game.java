@@ -24,7 +24,7 @@ public class Game extends JPanel {
         d.enableDice(3);
         this.board = board;
         pl = new PlayerList(this.board.players, board_height/(this.board.players.length+1),board_width/6);
-        pl.setPlayerToGreen(currentPlayerIndex);
+        pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -46,27 +46,27 @@ public class Game extends JPanel {
                 Field f = board.getField(xpos, ypos);
                 if (f!=null){
 
-                    if (d.getValue()==6 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied()) {
-                        f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
+                    if (d.getValue()==6 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied() && board.players[currentPlayerIndex].getHomeFigure() != null) {
+                        f.setFigure(board.players[currentPlayerIndex].getHomeFigure());
 
                         getGame().remove(pl);
 
                         pl = new PlayerList(board.players, board_height/(board.players.length+1),board_width/6);
-                        pl.setPlayerToGreen(currentPlayerIndex);
+                        pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
                         getGame().add(pl);
                         d.reset();
 
                         repaint();
                         updateUI();
                     }else {
-                        if (d.getValue() != -1) {
-                            f.isOccupied();
+                        if (d.getValue() != -1 && f.isOccupied()) {
                             moveFigure(f,d.getValue());
                             d.reset();
                             repaint();
                             updateUI();
                         }
                     }
+                    return;
                 }
 
                 if (((Settings.board_width-(Settings.buttonSize*2))<xpos && xpos<Settings.board_width-Settings.buttonSize) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
@@ -104,7 +104,7 @@ public class Game extends JPanel {
     }
     public int nextPlayer(){
         currentPlayerIndex = (currentPlayerIndex+1)%board.playerAmount;
-        pl.setPlayerToGreen(currentPlayerIndex);
+        pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         return currentPlayerIndex;
     }
 
@@ -113,7 +113,7 @@ public class Game extends JPanel {
             return;
         }
         if (!selectedField.getFigure().isRunning()) {
-            board.course[(selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson)].setFigure(selectedField.clearField());
+            board.course[((selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson))].setFigure(selectedField.clearField());
         }
     }
     private void rep(){
