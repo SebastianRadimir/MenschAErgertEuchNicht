@@ -3,8 +3,7 @@ package GuiStuff;
 import javax.swing.*;
 import java.awt.*;
 
-public class NewWindow {
-    JFrame frame = new JFrame();
+public class NewWindow extends JFrame{
     JTextArea label = new JTextArea("1. Jeder Spieler erhält x Figuren in Farbe y.\n" +
             "2. Jeder würfelt 1x und derjenige mit der größten Zahl fängt an. Bei gleicher Zahl wird erneut gewürfelt.\n" +
             "3. Wenn keine Figuren der eigenen Farbe auf dem Feld stehen, wird 3x gewürfelt. Wenn keine 6 gewürfelt wird, ist der \n" +
@@ -22,13 +21,13 @@ public class NewWindow {
             "In die Endfelder kann nur eingerückt werden, wenn die exakte Zahl auf die freien Felder gewürfelt wird.\n" +
             "10. Wenn alle Felder besetzt sind, hat dieser Spieler gewonnen.");
     NewWindow(){
-        frame.setTitle("Regeln");//funktioniert noch nicht
+        setTitle("Regeln");//funktioniert noch nicht
         label.setFont(new Font(null, Font.PLAIN,15));
         label.setBounds(0,0,800,400);
-        frame.add(label);
-        frame.setTitle("Mensch ärgere dich nicht");
-        frame.setSize(900, 500);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        add(label);
+        setTitle("Mensch ärgere dich nicht");
+        setSize(900, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
     }
 }

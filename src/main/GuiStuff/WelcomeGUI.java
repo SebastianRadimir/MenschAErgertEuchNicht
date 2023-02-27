@@ -27,11 +27,15 @@ public class WelcomeGUI extends JFrame {
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
 
+    private NewWindow window;
+
     public WelcomeGUI() {
         setContentPane(MainPanel);
         AnzahlSpielfelderText.setSelectedIndex(7);
         anzahlDerSpielfiguren.setSelectedIndex(3);
         anzahlDerSpieler.setSelectedIndex(2);
+        window = new NewWindow();
+        window.setVisible(false);
 
         setTitle("Mensch ärgere dich nicht");
         setSize(400, 300);
@@ -61,8 +65,9 @@ public class WelcomeGUI extends JFrame {
         Rules.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == Rules) {
-                        NewWindow ruleWindow = new NewWindow();
+                window.setVisible(true);
+                if (window.isActive()) {
+                    window.setVisible(false);
                 }
             }
         });
@@ -83,15 +88,15 @@ public class WelcomeGUI extends JFrame {
         new WelcomeGUI();
     }
 
-    public int getAnzahlSpielfelder(){
+    public int getAnzahlSpielfelder() {
         return anzahlSpielfelder;
     }
 
-    public int getAnzahlSpieler(){
+    public int getAnzahlSpieler() {
         return anzahlSpieler;
     }
 
-    public int getAnzahlSpielfiguren(){
+    public int getAnzahlSpielfiguren() {
         return anzahlSpielfiguren;
     }
 }
