@@ -1,5 +1,7 @@
 package Backend;
 
+import GuiStuff.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -10,12 +12,14 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
+    private DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
 
     public Game(Board board){
         currentPlayerIndex = 0;
-
+        d = new DiceGUI();
+        d.enableDice(3);
         this.board = board;
 
         this.addMouseMotionListener(new MouseMotionListener() {
@@ -37,13 +41,17 @@ public class Game extends JPanel {
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
-                if (f==null){
-                    return;
+                if (f!=null){
+                    f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
+                    repaint();
+                    updateUI();
                 }
-                f.setFigure(board.players[currentPlayerIndex].getFigures()[0]);
-                repaint();
-                updateUI();
 
+                if (((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
+                    d.roll();
+                    repaint();
+                    updateUI();
+                }
             }
 
             @Override
@@ -97,6 +105,9 @@ public class Game extends JPanel {
         g.fillRect(0, 0, board_width + 10, board_height + 10);
 
         this.board.draw(g, xpos, ypos);
+
+        d.paintComponent(g);
+
 
     }
 
