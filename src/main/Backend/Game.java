@@ -44,9 +44,10 @@ public class Game extends JPanel {
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
+
                 if (f!=null){
 
-                    if (d.getValue()==6 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied() && board.players[currentPlayerIndex].getHomeFigure() != null) {
+                    if (d.getValue()==6 && board.players[currentPlayerIndex].getHomeFigAmount() >= 1 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied() && board.players[currentPlayerIndex].getHomeFigure() != null) {
                         f.setFigure(board.players[currentPlayerIndex].getHomeFigure());
 
                         getGame().remove(pl);
@@ -58,6 +59,7 @@ public class Game extends JPanel {
 
                         repaint();
                         updateUI();
+                        return;
                     }else {
                         if (d.getValue() != -1 && f.isOccupied()) {
                             moveFigure(f,d.getValue());
@@ -73,6 +75,17 @@ public class Game extends JPanel {
                     d.roll();
                     repaint();
                     updateUI();
+                    return;
+                }
+                if (!d.canRoll() && ((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
+
+                    nextPlayer();
+
+                    d.enableDice(figureAmount == board.players[currentPlayerIndex].getHomeFigAmount()?3: 1);
+                    d.reset();
+                    repaint();
+                    updateUI();
+                    return;
                 }
             }
 
