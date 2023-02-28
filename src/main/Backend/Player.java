@@ -51,6 +51,16 @@ public class Player {
 
     }
 
+    public int getHomeFigAmount(){
+
+        int homeFigs = 0;
+        for (int i = 0; i < figureAmount; i++) {
+            if (figures[i].isHome()){
+                homeFigs++;
+            }
+        }
+        return homeFigs;
+    }
     public Figure[] getFigures() {
         return figures;
     }
