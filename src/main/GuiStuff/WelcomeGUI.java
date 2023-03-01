@@ -1,7 +1,5 @@
 package GuiStuff;
 
-import Backend.Player;
-
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +20,9 @@ public class WelcomeGUI extends JFrame {
 
     private JPanel MainPanel;
     private JButton Rules;
+    private JRadioButton multiplayerRadioButton;
+    private JTextField textField1;
+    private JTextField textField2;
 
     private int anzahlSpielfelder;
     private int anzahlSpieler;
