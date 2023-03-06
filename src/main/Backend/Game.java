@@ -1,5 +1,6 @@
 package Backend;
 
+import GuiStuff.ArrowPanel;
 import GuiStuff.PlayerList;
 import GuiStuff.Settings;
 
@@ -17,6 +18,7 @@ public class Game extends JPanel {
     private final Board board;
     private int currentPlayerIndex;
     private PlayerList pl;
+    private ArrowPanel nextPlayerBtn;
     public Game(Board board){
         this.setLayout(null);
         currentPlayerIndex = 0;
@@ -26,6 +28,11 @@ public class Game extends JPanel {
         pl = new PlayerList(this.board.players, board_height/(this.board.players.length+1),board_width/6);
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
+        nextPlayerBtn = new ArrowPanel(0.5, board.players[currentPlayerIndex].getColor(), board_bg_color);
+        this.add(nextPlayerBtn);
+        nextPlayerBtn.setSize(buttonSize, buttonSize);
+        nextPlayerBtn.setLocation(Settings.board_width-Settings.buttonSize, board_height-Settings.buttonSize);
+        nextPlayerBtn.setVisible(false);
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -80,12 +87,13 @@ public class Game extends JPanel {
                 if (!d.canRoll() && ((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
 
                     nextPlayer();
+                    nextPlayerBtn.setVisible(true);
 
                     d.enableDice(figureAmount == board.players[currentPlayerIndex].getHomeFigAmount()?3: 1);
+                    nextPlayerBtn.setColor(board.players[currentPlayerIndex].getColor());
                     d.reset();
                     repaint();
                     updateUI();
-                    return;
                 }
             }
 
