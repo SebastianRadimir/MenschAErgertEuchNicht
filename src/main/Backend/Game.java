@@ -28,7 +28,7 @@ public class Game extends JPanel {
         pl = new PlayerList(this.board.players, board_height/(this.board.players.length+1),board_width/6);
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
-        nextPlayerBtn = new ArrowPanel(0.5, board.players[currentPlayerIndex].getColor(), board_bg_color);
+        nextPlayerBtn = new ArrowPanel(0.9, board.players[currentPlayerIndex].getColor(), board_bg_color, false);
         this.add(nextPlayerBtn);
         nextPlayerBtn.setSize(buttonSize, buttonSize);
         nextPlayerBtn.setLocation(Settings.board_width-Settings.buttonSize, board_height-Settings.buttonSize);
