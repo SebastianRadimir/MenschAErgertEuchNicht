@@ -14,6 +14,10 @@ public class Figure{
         reachedEnd = false;
     }
 
+    public boolean isCorrectPlayer(Player p){
+        return p.getColor().equals(figureColor);
+    }
+
     public void setHome(boolean home) {
         isHome = home;
     }

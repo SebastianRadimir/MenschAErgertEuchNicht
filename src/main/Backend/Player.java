@@ -88,7 +88,7 @@ public class Player {
 
     }
 
-    public Figure getHomeFigure() {
+    public Figure getNextHomeFigure() {
         for (int i = 0; i < figures.length; i++) {
             if (figures[i].isHome()){
                 return figures[i];

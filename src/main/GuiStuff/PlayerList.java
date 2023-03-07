@@ -144,25 +144,13 @@ public class PlayerList extends JPanel {
      * if the method is called
      * @param playerName_p insert the Player.getPlayerName() for best use
      */
-    public void updateFiguresAtHome(String playerName_p){
+    public void updateFiguresAtHome(Player playerName_p){
         for (JLabel label :figuresAtHomeLabelList) {
-            if(label.getName().equals(playerName_p)){
+            if(label.getName().equals(playerName_p.getPlayerName())){
                 //we found the Label we want to update
 
-                for (Player player: playerlist) {
-                    if(player.getPlayerName().equals(playerName_p)){
-                        //compare the playerName to the Player-class to get actual stats
-
-                        int figureThatAreHome = 0;
-                        Figure[] figureList = player.getFigures();
-                        for(Figure figureSingle:figureList){
-                            if(figureSingle.isHome()){
-                                figureThatAreHome += 1;
-                            }
-                        }
-                        label.setText(figureThatAreHome + "/" + player.getFigures().length);
-                    }
-                }
+                //compare the playerName to the Player-class to get actual stats
+                label.setText(playerName_p.getHomeFigAmount() + "/" + playerName_p.getFigures().length);
             }
         }
     }
