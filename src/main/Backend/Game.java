@@ -32,7 +32,7 @@ public class Game extends JPanel {
         this.add(nextPlayerBtn);
         nextPlayerBtn.setSize(buttonSize, buttonSize);
         nextPlayerBtn.setLocation(Settings.board_width-Settings.buttonSize, board_height-Settings.buttonSize);
-        nextPlayerBtn.setVisible(false);
+        nextPlayerBtn.setVisible(true);
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -52,30 +52,29 @@ public class Game extends JPanel {
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
 
-                if (f!=null){
-
-                    if (d.getValue()==6 && board.players[currentPlayerIndex].getHomeFigAmount() >= 1 && board.course[currentPlayerIndex*fieldPerPerson].equals(f) && !f.isOccupied() && board.players[currentPlayerIndex].getHomeFigure() != null) {
-                        f.setFigure(board.players[currentPlayerIndex].getHomeFigure());
-
-                        getGame().remove(pl);
-
-                        pl = new PlayerList(board.players, board_height/(board.players.length+1),board_width/6);
-                        pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
-                        getGame().add(pl);
-                        d.reset();
-
-                        repaint();
-                        updateUI();
-                        return;
-                    }else {
-                        if (d.getValue() != -1 && f.isOccupied()) {
-                            moveFigure(f,d.getValue());
-                            d.reset();
-                            repaint();
-                            updateUI();
+                if (f!=null){// wenn auf ein feld gedrückt wurde:
+                    if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1){// wenn es noch mindestens eine figur zu hause gibt:
+                        if (board.course[currentPlayerIndex*fieldPerPerson].equals(f)){// wenn der spieler sein startfeld gedrückt hat:
+                            if (f.isOccupied()) {//  und es eine figur auf diesen feld da ist:
+                                // bewege die figur und setze den würfel zu etwas invalides
+                                moveFigure(f, d.getValue());
+                            }else if (d.getValue()==6){// und eine sechsa gewürfelt wurde
+                                f.setFigure(board.players[currentPlayerIndex].getNextHomeFigure());
+                                pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
+                                d.reset();
+                                repaint();
+                                updateUI();
+                                return;
+                            }
+                            // wenn das start feld nicht gedrückt wwurde und das start feld lehr ist:
+                        }else if (!board.course[currentPlayerIndex*fieldPerPerson].isOccupied()){
+                            moveFigure(f, d.getValue());
+                            return;
                         }
+                    }else { // wenn keine figuren zu hause sind:
+                        moveFigure(f, d.getValue());
+                        return;
                     }
-                    return;
                 }
 
                 if (((Settings.board_width-(Settings.buttonSize*2))<xpos && xpos<Settings.board_width-Settings.buttonSize) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
@@ -87,10 +86,10 @@ public class Game extends JPanel {
                 if (!d.canRoll() && ((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
 
                     nextPlayer();
-                    nextPlayerBtn.setVisible(true);
 
                     d.enableDice(figureAmount == board.players[currentPlayerIndex].getHomeFigAmount()?3: 1);
                     nextPlayerBtn.setColor(board.players[currentPlayerIndex].getColor());
+                    nextPlayerBtn.repaint();
                     d.reset();
                     repaint();
                     updateUI();
@@ -98,26 +97,14 @@ public class Game extends JPanel {
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-
+            public void mousePressed(MouseEvent e) {}
             @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
+            public void mouseReleased(MouseEvent e) {}
             @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
+            public void mouseEntered(MouseEvent e) {}
             @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
+            public void mouseExited(MouseEvent e) {}
         });
-
     }
 
     private Game getGame(){
@@ -130,11 +117,13 @@ public class Game extends JPanel {
     }
 
     public void moveFigure(Field selectedField, int amount){
-        if (!selectedField.isOccupied()){
+        if (!selectedField.isOccupied() || !selectedField.getFigure().isCorrectPlayer(board.players[currentPlayerIndex])){
             return;
         }
-        if (!selectedField.getFigure().isRunning()) {
+        if (!selectedField.getFigure().isHome() && amount>=0) {// hier muss noch das mit den nahc hause felder eingebaut werden!
             board.course[((selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson))].setFigure(selectedField.clearField());
+            pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
+            d.reset();
         }
     }
     private void rep(){

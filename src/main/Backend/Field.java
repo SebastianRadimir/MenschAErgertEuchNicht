@@ -10,7 +10,6 @@ public class Field{
     private final int posY;
     private Figure holdingFigure;
     private final int posIndex;
-
     public Field(int index, int posX, int posY){
         holdingFigure = null;
         posIndex = index;
@@ -37,6 +36,7 @@ public class Field{
     }
 
     public Figure clearField(){
+        this.holdingFigure.setHome(true);
         Figure pf = this.holdingFigure;
         this.holdingFigure = null;
         return pf;
