@@ -52,12 +52,14 @@ public class Game extends JPanel {
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
 
+                // aufpassen, dass andere figuren nicht den start blockieren!!!
                 if (f!=null){// wenn auf ein feld gedrückt wurde:
                     if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1){// wenn es noch mindestens eine figur zu hause gibt:
                         if (board.course[currentPlayerIndex*fieldPerPerson].equals(f)){// wenn der spieler sein startfeld gedrückt hat:
                             if (f.isOccupied()) {//  und es eine figur auf diesen feld da ist:
                                 // bewege die figur und setze den würfel zu etwas invalides
                                 moveFigure(f, d.getValue());
+                                return;
                             }else if (d.getValue()==6){// und eine sechsa gewürfelt wurde
                                 f.setFigure(board.players[currentPlayerIndex].getNextHomeFigure());
                                 pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
@@ -66,8 +68,8 @@ public class Game extends JPanel {
                                 updateUI();
                                 return;
                             }
-                            // wenn das start feld nicht gedrückt wwurde und das start feld lehr ist:
                         }else if (!board.course[currentPlayerIndex*fieldPerPerson].isOccupied()){
+                            // wenn das start feld nicht gedrückt wwurde und das start feld lehr ist:
                             moveFigure(f, d.getValue());
                             return;
                         }
@@ -124,6 +126,8 @@ public class Game extends JPanel {
             board.course[((selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson))].setFigure(selectedField.clearField());
             pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
             d.reset();
+            repaint();
+            updateUI();
         }
     }
     private void rep(){
