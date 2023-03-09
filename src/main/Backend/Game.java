@@ -25,7 +25,7 @@ public class Game extends JPanel {
         d = new DiceGUI();
         d.enableDice(3);
         this.board = board;
-        pl = new PlayerList(this.board.players, board_height/(this.board.players.length+1),board_width/6);
+        pl = new PlayerList(this.board.players, board_height/(this.board.players.length*2),board_width/7);
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
         nextPlayerBtn = new ArrowPanel(0.9, board.players[currentPlayerIndex].getColor(), board_bg_color, false);

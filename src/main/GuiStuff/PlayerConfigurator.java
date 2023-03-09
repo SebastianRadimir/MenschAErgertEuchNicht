@@ -117,7 +117,13 @@ public class PlayerConfigurator extends JFrame{
 
                 Player[] ps = new Player[numPlayers];
                 for (int i = 0; i < numPlayers; i++){
-                    ps[i] = new Player(i,figureAmount, color[i], playerNameFields[i].getText());
+                    String rs;
+                    try{
+                        rs = playerNameFields[i].getText().substring(0,20);
+                    }catch (Exception ignore){
+                        rs = playerNameFields[i].getText();
+                    }
+                    ps[i] = new Player(i,figureAmount, color[i], rs);
                 }
                 dispose();
                 startGame(ps);
