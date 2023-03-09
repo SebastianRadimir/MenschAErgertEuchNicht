@@ -14,7 +14,7 @@ public class Figure{
         reachedEnd = false;
     }
 
-    public boolean isCorrectPlayer(Player p){
+    public boolean isSamePlayer(Player p){
         return p.getColor().equals(figureColor);
     }
 
@@ -44,4 +44,8 @@ public class Figure{
         return reachedEnd;
     }
 
+    public void kill() {
+        isHome = true;
+        reachedEnd = false;
+    }
 }
