@@ -40,6 +40,18 @@ public class Board {
         }
     }
 
+    public Player getPlayerByFigure(Figure fig){
+
+        for (int i = 0; i < playerAmount; i++) {
+
+            if (fig.getColor().equals(players[i].getColor())){
+                return players[i];
+            }
+
+        }
+        return null;
+    }
+
     public Field getField(int xPos, int yPos){
         for (int i = 0; i < playerAmount*fieldPerPerson; i++) {
 
