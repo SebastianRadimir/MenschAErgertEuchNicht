@@ -26,6 +26,7 @@ public class Game extends JPanel {
         d.enableDice(3);
         this.board = board;
         pl = new PlayerList(this.board.players, board_height/(this.board.players.length*2),board_width/7);
+        pl.setLocation(board_width-(board_width/7),0);
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
         nextPlayerBtn = new ArrowPanel(0.9, board.players[currentPlayerIndex].getColor(), board_bg_color, false);
@@ -63,6 +64,7 @@ public class Game extends JPanel {
                             } else {
                                 // figuren zu hause und eine sechs gewürfelt und startfeld vom anderen spieler besetzt
                                 f.getFigure().kill();
+                                pl.updateFiguresAtHome(board.getPlayerByFigure(f.getFigure()));
                             }
                         }
                         f.setFigure(board.players[currentPlayerIndex].getNextHomeFigure());
