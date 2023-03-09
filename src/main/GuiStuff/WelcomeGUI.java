@@ -1,7 +1,5 @@
 package GuiStuff;
 
-import Backend.Player;
-
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
@@ -22,16 +20,27 @@ public class WelcomeGUI extends JFrame {
 
     private JPanel MainPanel;
     private JButton Rules;
+    private JRadioButton multiplayerRadioButton;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JPanel multiplayerPanel;
 
     private int anzahlSpielfelder;
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
 
+    private NewWindow window;
+
     public WelcomeGUI() {
         setContentPane(MainPanel);
+
+        multiplayerPanel.setVisible(false);
+
         AnzahlSpielfelderText.setSelectedIndex(7);
         anzahlDerSpielfiguren.setSelectedIndex(3);
         anzahlDerSpieler.setSelectedIndex(2);
+        window = new NewWindow();
+        window.setVisible(false);
 
         setTitle("Mensch ärgere dich nicht");
         setSize(400, 300);
@@ -61,12 +70,24 @@ public class WelcomeGUI extends JFrame {
         Rules.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource() == Rules) {
-                        NewWindow ruleWindow = new NewWindow();
+                window.setVisible(true);
+                if (window.isActive()) {
+                    window.setVisible(false);
                 }
             }
         });
 
+
+        multiplayerRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(multiplayerRadioButton.isSelected()){
+                    multiplayerPanel.setVisible(true);
+                }else{
+                    multiplayerPanel.setVisible(false);
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {
@@ -83,15 +104,15 @@ public class WelcomeGUI extends JFrame {
         new WelcomeGUI();
     }
 
-    public int getAnzahlSpielfelder(){
+    public int getAnzahlSpielfelder() {
         return anzahlSpielfelder;
     }
 
-    public int getAnzahlSpieler(){
+    public int getAnzahlSpieler() {
         return anzahlSpieler;
     }
 
-    public int getAnzahlSpielfiguren(){
+    public int getAnzahlSpielfiguren() {
         return anzahlSpielfiguren;
     }
 }
