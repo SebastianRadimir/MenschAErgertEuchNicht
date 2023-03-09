@@ -133,6 +133,7 @@ public class PlayerList extends JPanel {
                 for (Player p:playerlist) {
                     if(p.getPlayerName().equals(playerName_p)){
                         actualPlayer = p;
+                        updateactuallPlayerColor();
                     }
                 }
             }
