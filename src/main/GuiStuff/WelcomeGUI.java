@@ -1,7 +1,5 @@
 package GuiStuff;
 
-import Backend.Player;
-
 import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
@@ -22,6 +20,10 @@ public class WelcomeGUI extends JFrame {
 
     private JPanel MainPanel;
     private JButton Rules;
+    private JRadioButton multiplayerRadioButton;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JPanel multiplayerPanel;
 
     private int anzahlSpielfelder;
     private int anzahlSpieler;
@@ -31,6 +33,9 @@ public class WelcomeGUI extends JFrame {
 
     public WelcomeGUI() {
         setContentPane(MainPanel);
+
+        multiplayerPanel.setVisible(false);
+
         AnzahlSpielfelderText.setSelectedIndex(7);
         anzahlDerSpielfiguren.setSelectedIndex(3);
         anzahlDerSpieler.setSelectedIndex(2);
@@ -72,6 +77,17 @@ public class WelcomeGUI extends JFrame {
             }
         });
 
+
+        multiplayerRadioButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(multiplayerRadioButton.isSelected()){
+                    multiplayerPanel.setVisible(true);
+                }else{
+                    multiplayerPanel.setVisible(false);
+                }
+            }
+        });
     }
 
     public static void main(String[] args) {
