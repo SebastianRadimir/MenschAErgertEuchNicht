@@ -52,32 +52,6 @@ public class Game extends JPanel {
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
 
-                //if (f!=null){// wenn auf ein feld gedrückt wurde:
-                //    if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1){// wenn es noch mindestens eine figur zu hause gibt:
-                //        if (board.course[currentPlayerIndex*fieldPerPerson].equals(f)){// wenn der spieler sein startfeld gedrückt hat:
-                //            if (f.isOccupied()) {//  und es eine figur auf diesen feld da ist:
-                //                // bewege die figur und setze den würfel zu etwas invalides
-                //                moveFigure(f, d.getValue());
-                //                return;
-                //            }else if (d.getValue()==6){// und eine sechsa gewürfelt wurde
-                //                f.setFigure(board.players[currentPlayerIndex].getNextHomeFigure());
-                //                pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
-                //                d.reset();
-                //                repaint();
-                //                updateUI();
-                //                return;
-                //            }
-                //        }else if (!board.course[currentPlayerIndex*fieldPerPerson].isOccupied()){
-                //            // wenn das start feld nicht gedrückt wwurde und das start feld lehr ist:
-                //            moveFigure(f, d.getValue());
-                //            return;
-                //        }
-                //    }else { // wenn keine figuren zu hause sind:
-                //        moveFigure(f, d.getValue());
-                //        return;
-                //    }
-                //}
-
                 if (f!=null) {
                     // figuren zu hause und eine sechs gewürfelt und startfeld gedrückt wurde
                     if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1 && d.getValue() == 6 && board.course[currentPlayerIndex * fieldPerPerson].equals(f)) {
@@ -99,7 +73,7 @@ public class Game extends JPanel {
                         return;
                     }
                     // keine figuren zu hause
-                    if (board.players[currentPlayerIndex].getHomeFigAmount() == 0 || board.course[currentPlayerIndex * fieldPerPerson].equals(f)){
+                    if (board.players[currentPlayerIndex].getHomeFigAmount() == 0 || d.getValue() != 6){
                         moveFigure(f, d.getValue());
                     }
                 }
@@ -146,13 +120,35 @@ public class Game extends JPanel {
         if (selectedField.getFigure() == null){
             return;
         }
+
+        int selectedFieldIndex = ((selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson));
+
         if (!selectedField.getFigure().isSamePlayer(board.players[currentPlayerIndex])){
             return;
         }
-        if (!selectedField.getFigure().isHome() && amount>=0) {// hier muss noch das mit den nahc hause felder eingebaut werden!
-            Field fieldInQuestion = board.course[((selectedField.getIndex() + amount) % (playerAmount*fieldPerPerson))];
+        if (!selectedField.getFigure().isHome() && amount>=0) {
+            Field fieldInQuestion = board.course[selectedFieldIndex];
+
+            // wenn eine runde für die figur gemacht wurde...
+            //if (selectedFieldIndex <= (fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson)){
+
+            //    int homeDepth = selectedFieldIndex-((currentPlayerIndex * fieldPerPerson)-1);
+
+            //    House h = board.players[currentPlayerIndex].getHome();
+
+            //    // wenn das feld zu hause frei ist
+            //    if (h.getRoom(homeDepth).isOccupied()){
+            //        Figure f = selectedField.clearField();
+            //        f.setReachedEnd(true);
+            //        h.getRoom(homeDepth).setFigure(f);
+            //    }
+
+            //    return;
+            //}
+
             if (fieldInQuestion.isOccupied()){
                 fieldInQuestion.getFigure().kill();
+                pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
             }
             fieldInQuestion.setFigure(selectedField.clearField());
             pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
