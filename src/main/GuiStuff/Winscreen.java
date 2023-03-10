@@ -13,7 +13,7 @@ public class Winscreen extends JPanel {
     private Color color;
     private String name;
     private Star[] stars;
-    int maxStars = 200;
+    int maxStars = 500;
 
     public Winscreen(Player winingP){
 
@@ -22,7 +22,7 @@ public class Winscreen extends JPanel {
         stars = new Star[maxStars];
         for (int i = 0; i <maxStars; i++) {
             int s = new Random().nextInt(10,50);
-            stars[i] = new Star(new Random().nextInt(1,board_width+(buttonSize*4)), new Random().nextInt(-board_width,-10),s,s, new Random().nextInt(3,100)/100.0, new Random().nextInt(3,9));
+            stars[i] = new Star(new Random().nextInt(1,board_width+(buttonSize*4)), new Random().nextInt(-board_width*2,-10),s,s, new Random().nextInt(3,100)/100.0, new Random().nextInt(3,9));
         }
     }
 
@@ -94,7 +94,7 @@ class Star{
 
         for (int i = 0; i < (spikes*2)+1; i++) {
 
-            double angle = div*i;
+            double angle = (div*i)+((yMin)/50.0);
 
             double v = ((i % 2) * (radius - minDist)) + minDist;
             xPos[i] = (int)(centerX+(Math.cos(angle)*v));
@@ -103,7 +103,7 @@ class Star{
         }
 
         this.yMin+=this.fallSpeed;
-        xMin = (int)(xMin+(Math.sin(yMin/(modifier*modifier)*modifier*modifier*modifier*modifier*modifier)));
+        //xMin = (int)(xMin+(Math.sin(yMin/(modifier))*modifier*modifier*modifier*modifier*modifier));
 
         return new Polygon(xPos,yPos,(spikes*2));
 
