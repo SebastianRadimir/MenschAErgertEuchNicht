@@ -9,7 +9,6 @@ public class Player {
     private final Figure[] figures;
     private final Color playerColor;
     private final String playerName;
-    private final int playerIndex;
     private final House home;
     private final int maX;
     private final int maY;
@@ -18,7 +17,6 @@ public class Player {
 
 
     public Player(int playerIndex, int figureAmount, Color playerColor, String playerName){
-        this.playerIndex = playerIndex;
         figures = new Figure[figureAmount];
 
         this.playerColor = playerColor;
@@ -83,10 +81,6 @@ public class Player {
         return playerName;
     }
 
-    public int getPlayerIndex() {
-        return playerIndex;
-    }
-
     public void draw(Graphics g, int mpx, int mpy){
 
         Graphics2D g2 = (Graphics2D) g;
@@ -99,9 +93,9 @@ public class Player {
     }
 
     public Figure getNextHomeFigure() {
-        for (int i = 0; i < figures.length; i++) {
-            if (figures[i].isHome()){
-                return figures[i];
+        for (Figure figure : figures) {
+            if (figure.isHome()) {
+                return figure;
             }
         }
         return null;

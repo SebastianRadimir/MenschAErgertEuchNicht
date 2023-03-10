@@ -1,7 +1,6 @@
 package Backend;
 
 import GuiStuff.*;
-import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,12 +17,16 @@ public class Game extends JPanel {
     private final DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
-    private PlayerList pl;
-    private ArrowPanel nextPlayerBtn;
+    private final PlayerList pl;
+    private final ArrowPanel nextPlayerBtn;
     private Winscreen ws;
-    private RuleWindow rw;
+    private final RuleWindow rw;
+    private Figure runner;
+    private double movePIndex = 0;
+    private double endMoveIndex = 0;
     public Game(Board board,JFrame parent){
         ws = null;
+        runner = null;
         rw = new RuleWindow();
         rw.setVisible(false);
         this.setLayout(null);
@@ -140,10 +143,9 @@ public class Game extends JPanel {
         });
     }
 
-    public int nextPlayer(){
+    public void nextPlayer(){
         currentPlayerIndex = (currentPlayerIndex+1)%board.playerAmount;
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
-        return currentPlayerIndex;
     }
 
     public void moveFigure(Field selectedField, int amount){
@@ -187,11 +189,34 @@ public class Game extends JPanel {
             }
             selectedField.getFigure().addSteps(amount);
 
-            fieldInQuestion.setFigure(selectedField.clearField());
+            runner = selectedField.clearField();
+            movePIndex = ((((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson))*selectedFieldIndex));
+            endMoveIndex = ((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson))*(selectedFieldIndex+amount);
+            t = new Timer(16, ae -> {
+                startRunning(fieldInQuestion);
+                repaint();
+            });
+            t.start();
+
+        }
+    }
+
+    private void startRunning(Field fieldInQuestion){
+
+        movePIndex+=1;
+
+        if (movePIndex>=endMoveIndex) {
+            movePIndex = 0;
+            endMoveIndex = 0;
+            t.stop();
+            fieldInQuestion.setFigure(runner);
+            runner = null;
+            t=null;
             pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
             d.reset();
             rep();
         }
+
     }
 
     private void setCurrentWinner(){
@@ -221,6 +246,15 @@ public class Game extends JPanel {
         g.fillRect(0, 0, board_width + 10, board_height + 10);
 
         this.board.draw(g, xpos, ypos);
+
+        if (runner != null){
+
+            int fs = fieldSize/2;
+            g.setColor(runner.getColor());
+            Point p = board.getPoint((int)movePIndex);
+            g.fillOval(p.x-fs,p.y-fs,fieldSize, fieldSize);
+
+        }
 
         d.paintComponent(g);
 

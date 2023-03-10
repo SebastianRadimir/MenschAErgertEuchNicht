@@ -10,7 +10,7 @@ public class Settings {
 
     public static int playerAmount = 4;
     public static int figureAmount = 4;
-    public static int circlePrecision = 360;
+    public static int circlePrecision = 500;
     public static double PI2 = PI*2.0;
     public static int fieldPerPerson = 10;
     public static int board_width = 1000;

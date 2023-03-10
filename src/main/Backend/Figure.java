@@ -27,9 +27,8 @@ public class Figure{
     public int getSteps(){
         return this.steps;
     }
-    public int addSteps(int aSteps){
+    public void addSteps(int aSteps){
         steps += aSteps;
-        return steps;
     }
     public void setReachedEnd(boolean reachedEnd) {
         this.reachedEnd = reachedEnd;
@@ -37,9 +36,6 @@ public class Figure{
 
     public Color getColor(){
         return figureColor;
-    }
-    public boolean isRunning(){
-        return !isHome && !reachedEnd;
     }
 
     /***

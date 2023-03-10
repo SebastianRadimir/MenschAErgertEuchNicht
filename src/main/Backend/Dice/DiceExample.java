@@ -13,9 +13,7 @@ public class DiceExample {
         board_width = size.width;
         board_height = size.height;
 
-        while (true) {
-            int d = DiceDialogManager.showDialog();
-            System.out.println("value:" + d);
-        }
+        int d = DiceDialogManager.showDialog();
+        System.out.println("value:" + d);
     }
 }

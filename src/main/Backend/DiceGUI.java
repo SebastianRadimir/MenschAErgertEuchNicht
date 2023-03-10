@@ -7,13 +7,11 @@ import GuiStuff.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class DiceGUI extends JPanel {
 
     private int canRoll;
-    private DicePanel dp;
+    private final DicePanel dp;
     private int value = -1;
 
     public DiceGUI(){

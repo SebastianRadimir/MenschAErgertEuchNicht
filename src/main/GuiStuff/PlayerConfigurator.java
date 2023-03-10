@@ -14,9 +14,9 @@ import java.util.Random;
 import javax.swing.*;
 
 public class PlayerConfigurator extends JFrame{
-    private int numPlayers;
-    private int figureAmount;
-    private int fieldPerPerson;
+    private final int numPlayers;
+    private final int figureAmount;
+    private final int fieldPerPerson;
     private final Color[] color;
     private final JTextField[] playerNameFields;
     private final JButton[] colorButtons;

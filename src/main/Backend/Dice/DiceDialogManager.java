@@ -17,7 +17,7 @@ public class DiceDialogManager extends JComponent implements Accessible {
         final DiceDisplay pane = new DiceDisplay();
 
         DiceValueTracker ok = new DiceValueTracker(pane);
-        JDialog dialog = createDialog("DICE", pane, ok);
+        JDialog dialog = createDialog(pane, ok);
 
         dialog.addComponentListener(new DisposeOnClose());
 
@@ -41,18 +41,18 @@ public class DiceDialogManager extends JComponent implements Accessible {
             return (Window)parentComponent;
         return getWindowForComponent(parentComponent.getParent());
     }
-    private static JDialog createDialog(String title, DiceDisplay chooserPane, ActionListener okListener) throws HeadlessException {
+    private static JDialog createDialog(DiceDisplay chooserPane, ActionListener okListener) throws HeadlessException {
 
         Window window = getWindowForComponent(null);
         DiceDialog dialog;
         if (window instanceof Frame) {
-            dialog = new DiceDialog((Frame)window, title, chooserPane,
+            dialog = new DiceDialog((Frame)window, "DICE", chooserPane,
                     okListener, null);
         } else {
-            dialog = new DiceDialog((Dialog)window, title, chooserPane,
+            dialog = new DiceDialog((Dialog)window, "DICE", chooserPane,
                     okListener, null);
         }
-        dialog.getAccessibleContext().setAccessibleDescription(title);
+        dialog.getAccessibleContext().setAccessibleDescription("DICE");
         dialog.setSize(Settings.board_width+10,Settings.board_height/4);
         dialog.setLocation(-5,Settings.board_height/4);
         return dialog;

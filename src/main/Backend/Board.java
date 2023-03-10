@@ -33,11 +33,15 @@ public class Board {
 
         double div = PI2/(playerAmount*fieldPerPerson);
         for (int i = 3; i < (playerAmount*fieldPerPerson)+3; i++) {
-            double ni = div*(i+0.5);
+            double ni = div*i;//*(i+0.5);
 
             double pn = getBoardShape(ni);
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
+    }
+    public Point getPoint(int i){
+        i = (i%circlePrecision);
+        return new Point(courseLineArrX[i], courseLineArrY[i]);
     }
 
     public Player getPlayerByFigure(Figure fig){

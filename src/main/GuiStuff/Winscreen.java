@@ -23,9 +23,9 @@ public class Winscreen extends JPanel {
         stars = new Star[maxStars];
         for (int i = 0; i <maxStars; i++) {
             int s = new Random().nextInt(10,50);
-            stars[i] = new Star(new Random().nextInt(1,board_width+(buttonSize*4)), new Random().nextInt(-board_width*2,-10),s,s, new Random().nextInt(3,100)/100.0, new Random().nextInt(3,9));
+            stars[i] = new Star(new Random().nextInt(1,board_width+(buttonSize*4)), new Random().nextInt(-board_width*2,-10),s, new Random().nextInt(3,100)/100.0, new Random().nextInt(3,9));
         }
-        specialSnowflake = new Star(-10,0, 1, 1, new Random().nextInt(3,100)/100.0, 3);
+        specialSnowflake = new Star(-10,0, 1, new Random().nextInt(3,100)/100.0, 3);
     }
     public boolean passedEnough(){
         return specialSnowflake.isDeepEnough();
@@ -68,18 +68,16 @@ public class Winscreen extends JPanel {
 }
 class Star{
 
-    private int xMin;
+    private final int xMin;
     private int yMin;
-    private int xSize;
-    private int ySize;
-    private double modifier;
-    private int fallSpeed;
+    private final int xSize;
+    private final double modifier;
+    private final int fallSpeed;
 
-    public Star(int xMin, int yMin, int xSize, int ySize, double modifier, int fallSpeed){
+    public Star(int xMin, int yMin, int size, double modifier, int fallSpeed){
         this.xMin = xMin;
         this.yMin = yMin;
-        this.xSize = xSize;
-        this.ySize = ySize;
+        this.xSize = size;
         this.modifier = modifier;
         this.fallSpeed = fallSpeed;
     }
