@@ -3,6 +3,7 @@ package Backend;
 import GuiStuff.ArrowPanel;
 import GuiStuff.PlayerList;
 import GuiStuff.Settings;
+import GuiStuff.Winscreen;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,12 +15,15 @@ import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
 
+    private Timer t;
     private final DiceGUI d;
     private final Board board;
     private int currentPlayerIndex;
     private PlayerList pl;
     private ArrowPanel nextPlayerBtn;
+    private Winscreen ws;
     public Game(Board board){
+        ws = null;
         this.setLayout(null);
         currentPlayerIndex = 0;
         d = new DiceGUI();
@@ -54,6 +58,9 @@ public class Game extends JPanel {
             public void mousePressed(MouseEvent e) {}
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (ws != null){
+                    return;
+                }
                 Point b = MouseInfo.getPointerInfo().getLocation();
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
@@ -109,9 +116,6 @@ public class Game extends JPanel {
         });
     }
 
-    private Game getGame(){
-        return this;
-    }
     public int nextPlayer(){
         currentPlayerIndex = (currentPlayerIndex+1)%board.playerAmount;
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
@@ -129,49 +133,53 @@ public class Game extends JPanel {
             return;
         }
         if (!selectedField.getFigure().isHome() && amount>0) {
-            Field fieldInQuestion = board.course[selectedFieldIndex];
-
             // wenn eine runde für die figur gemacht wurde...
-            int homeDepth = selectedFieldIndex-((fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson));
-            //System.out.println("depth"+homeDepth);
-            if (selectedFieldIndex > (fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson)){
+            if (selectedField.getFigure().getSteps()+amount>=(playerAmount*fieldPerPerson)){
+                int homeDepth = (selectedField.getFigure().getSteps()+amount)-(playerAmount*fieldPerPerson);
 
-                //System.out.println(homeDepth);
-                //House h = board.players[currentPlayerIndex].getHome();
-
-                //// wenn das feld zu hause frei ist
-                //if (h.getRoom(homeDepth).isOccupied()){
-                //    Figure f = selectedField.clearField();
-                //    f.setReachedEnd(true);
-                //    h.getRoom(homeDepth).setFigure(f);
-                //}
-
-                //return;
+                // heim ist out of bounds
+                if (homeDepth>figureAmount){
+                    return;
+                }
+                House h = board.players[currentPlayerIndex].getHome();
+                // wenn das feld zu hause frei ist
+                if (!h.getRoom(homeDepth).isOccupied()){
+                    Figure f = selectedField.clearField();
+                    f.setReachedEnd(true);
+                    h.getRoom(homeDepth).setFigure(f);
+                    d.reset();
+                    rep();
+                    if (board.players[currentPlayerIndex].getFinishedFigAmount() == figureAmount){
+                        setCurrentWinner();
+                    }
+                }
+                return;
             }
 
+            Field fieldInQuestion = board.course[selectedFieldIndex];
             if (fieldInQuestion.isOccupied()){
                 fieldInQuestion.getFigure().kill();
                 pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
             }
+            selectedField.getFigure().addSteps(amount);
+
             fieldInQuestion.setFigure(selectedField.clearField());
             pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
             d.reset();
-            repaint();
-            updateUI();
+            rep();
         }
     }
-    
 
-
-
-
-
-
-
-
-
-
-
+    private void setCurrentWinner(){
+        ws = new Winscreen(board.players[currentPlayerIndex]);
+        pl.setVisible(false);
+        nextPlayerBtn.setVisible(false);
+        rep();
+        t = new Timer(16, ae -> {
+                    rep();
+                });
+        t.start();
+    }
     private void rep(){
         this.repaint();
         this.updateUI();
@@ -191,6 +199,9 @@ public class Game extends JPanel {
 
         d.paintComponent(g);
 
+        if (ws != null){
+            ws.paintWinner(g);
+        }
 
     }
 
