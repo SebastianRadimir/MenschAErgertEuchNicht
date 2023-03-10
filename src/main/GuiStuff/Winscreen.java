@@ -35,14 +35,18 @@ public class Winscreen extends JPanel {
         g.setColor(board_bg_color);
         g.fillRect((Settings.board_width-(Settings.buttonSize*2)), (Settings.board_height-Settings.buttonSize), buttonSize,buttonSize);
         Color c = board_bg_color;
-        g.setColor(new Color(c.getRed(),c.getGreen(),c.getBlue(),128).brighter());
+        g.setColor(new Color(c.getRed(),c.getGreen(),c.getBlue(),128+32).brighter());
         g.fillRect(0,0,board_width,board_height);
 
         g.setFont(new Font(null, Font.PLAIN, buttonSize));
 
         g.setColor(this.color);
 
-        g.drawString("\""+this.name+"\" hat gewonnen!", boardCenterX,boardCenterY);
+        String winTitle = "\""+this.name+"\" hat gewonnen!";
+        int l = winTitle.length();
+
+
+        g.drawString(winTitle, (int)(boardCenterX-((l/4.0)*buttonSize)), boardCenterY);
 
         g.setColor(new Color(255, 206, 46));
 
@@ -75,7 +79,6 @@ class Star{
     public Polygon nextIter(){
 
         int spikes = (int)(modifier*10)+2;
-        int yMax = yMin+ySize;
 
         double radius = xSize/2.0;
         double minDist = xSize/6.0;

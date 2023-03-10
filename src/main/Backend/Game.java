@@ -52,6 +52,7 @@ public class Game extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                setCurrentWinner();
             }
 
             @Override
