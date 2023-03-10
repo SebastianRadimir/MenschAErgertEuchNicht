@@ -15,25 +15,11 @@ public class House {
         this.owner = owner;
 
     }
-
-    public boolean[] getFreeRooms(){
-
-        boolean[] returnArr = new boolean[rooms.length];
-
-        for (int i = 0; i < rooms.length; i++) {
-            returnArr[i] = !rooms[i].isOccupied();
-        }
-
-        return returnArr;
-    }
     public Field getRoom(int i){
         if (i>=rooms.length){
             return null;
         }
         return rooms[i];
-    }
-    public Field[] getRooms(){
-        return rooms;
     }
 
     public void draw(Graphics g, int mpx, int mpy){

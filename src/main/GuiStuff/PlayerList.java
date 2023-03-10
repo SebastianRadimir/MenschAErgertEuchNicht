@@ -19,12 +19,11 @@ public class PlayerList extends JPanel {
     private final Player[] playerlist;
     private final ArrayList<JPanel> colorPanelList = new ArrayList<>();
     private final ArrayList<JLabel> figuresAtHomeLabelList = new ArrayList<>();
-    private String playerNameTitle = "Spielerliste";
-    private String figuresAtHomeTitle = "Figuren Zuhause";
+    private final String playerNameTitle = "Spielerliste";
     private final Color notPlayingColor = new Color(200,0,0);
     private final Color isPlayingColor = new Color(0,200,0);
     private Player actualPlayer;
-    private Color defaultBackground;
+    private final Color defaultBackground;
     //Constructor---------------------------------------
     /**
      * initilaze a PlayerList JPanel where every Player is listed
@@ -57,7 +56,8 @@ public class PlayerList extends JPanel {
         setSize(widthOfWindow,(playerlist.length + 1) * heightPerPlayer + 10);
         setBackground(defaultBackground);
 
-        add(createRowWithPlayerAndStats(defaultBackground,playerNameTitle,figuresAtHomeTitle));
+        String figuresAtHomeTitle = "Figuren Zuhause";
+        add(createRowWithPlayerAndStats(defaultBackground,playerNameTitle, figuresAtHomeTitle));
 
         //add for every player a new row with Statuscolor,Name and Figures at Home
         for (Player player:playerlist) {
@@ -102,11 +102,11 @@ public class PlayerList extends JPanel {
     }
     private Color invertColor(Color c){
         //Bruda akzeptier mal so #StackOverFlow
-        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000;
+        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000.0;
         return y >= 128 ? Color.black : Color.white;
     }
     private void actualPlayerUpdater(){
-        Runnable helloRunnable = () -> updateactuallPlayerColor();
+        Runnable helloRunnable = this::updateactuallPlayerColor;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(helloRunnable, 1000, 200, TimeUnit.MILLISECONDS);
     }

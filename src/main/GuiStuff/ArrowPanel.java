@@ -7,19 +7,12 @@ public class ArrowPanel extends JPanel {
 
     private Color bgColor;
     private Color color;
-    private double arrowDirection;
-    private ArrowPolygon arrowP;
+    private final double arrowDirection;
+    private final ArrowPolygon arrowP;
 
-    public ArrowPanel(double arrowDirection, Color color, Color backgroundColor){
-        this.color = color;
-        this.arrowP = new ArrowPolygon(color);
-        this.arrowDirection = arrowDirection;
-        this.bgColor = backgroundColor;
-
-    }
     public ArrowPanel(double arrowDirection, Color color, Color backgroundColor, boolean normalArrow){
         this.color = color;
-        this.arrowP = new ArrowPolygon(color,normalArrow);
+        this.arrowP = new ArrowPolygon(normalArrow);
         this.arrowDirection = arrowDirection;
         this.bgColor = backgroundColor;
 
@@ -55,20 +48,12 @@ public class ArrowPanel extends JPanel {
         public void drawShape(Graphics g, int xMin, int yMin, int xSize, int ySize, double modifier);
     }
 
-    public class ArrowPolygon implements ComputeGraphics {
-        private final Color color;
-        private boolean normal;
+    public static class ArrowPolygon implements ComputeGraphics {
+        private final boolean normal;
 
-        public ArrowPolygon(Color c){
-            this.color = c;
-            this.normal = true;
-        }
-        public ArrowPolygon(Color c, boolean normalArrow){
-            this.color = c;
+        public ArrowPolygon(boolean normalArrow){
             this.normal = normalArrow;
         }
-
-        public Color getColor(){return this.color;}
 
         @Override
         public void drawShape(Graphics g, int xMin, int yMin, int xSize, int ySize, double modifier) {
