@@ -51,6 +51,16 @@ public class Player {
 
     }
 
+    public int getFinishedFigAmount(){
+
+        int homeFigs = 0;
+        for (int i = 0; i < figureAmount; i++) {
+            if (figures[i].inFinishLine()){
+                homeFigs++;
+            }
+        }
+        return homeFigs;
+    }
     public int getHomeFigAmount(){
 
         int homeFigs = 0;

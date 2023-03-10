@@ -7,11 +7,13 @@ public class Figure{
     private boolean isHome;
     private boolean reachedEnd;
     private final Color figureColor;
+    private int steps;
 
     public Figure(Color c){
         figureColor = c;
         isHome = true;
         reachedEnd = false;
+        steps = 0;
     }
 
     public boolean isSamePlayer(Player p){
@@ -22,6 +24,13 @@ public class Figure{
         isHome = home;
     }
 
+    public int getSteps(){
+        return this.steps;
+    }
+    public int addSteps(int aSteps){
+        steps += aSteps;
+        return steps;
+    }
     public void setReachedEnd(boolean reachedEnd) {
         this.reachedEnd = reachedEnd;
     }
@@ -45,6 +54,7 @@ public class Figure{
     }
 
     public void kill() {
+        steps = 0;
         isHome = true;
         reachedEnd = false;
     }
