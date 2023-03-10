@@ -37,7 +37,7 @@ public class Game extends JPanel {
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-
+                rep();
             }
 
             @Override
@@ -48,12 +48,21 @@ public class Game extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {
                 Point b = MouseInfo.getPointerInfo().getLocation();
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
                 Field f = board.getField(xpos, ypos);
 
                 if (f!=null) {
+                    if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1 && !board.course[currentPlayerIndex * fieldPerPerson].equals(f) && board.course[currentPlayerIndex * fieldPerPerson].isOccupied() && board.course[currentPlayerIndex * fieldPerPerson].getFigure().isSamePlayer(board.players[currentPlayerIndex])){
+                        return;
+                    }
                     // figuren zu hause und eine sechs gewürfelt und startfeld gedrückt wurde
                     if (board.players[currentPlayerIndex].getHomeFigAmount() >= 1 && d.getValue() == 6 && board.course[currentPlayerIndex * fieldPerPerson].equals(f)) {
                         if (f.isOccupied()) {
@@ -70,8 +79,7 @@ public class Game extends JPanel {
                         f.setFigure(board.players[currentPlayerIndex].getNextHomeFigure());
                         pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
                         d.reset();
-                        repaint();
-                        updateUI();
+                        rep();
                         return;
                     }
                     // keine figuren zu hause
@@ -81,8 +89,7 @@ public class Game extends JPanel {
                 }
                 if (((Settings.board_width-(Settings.buttonSize*2))<xpos && xpos<Settings.board_width-Settings.buttonSize) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
                     d.roll();
-                    repaint();
-                    updateUI();
+                    rep();
                     return;
                 }
                 if (!d.canRoll() && ((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
@@ -93,15 +100,8 @@ public class Game extends JPanel {
                     nextPlayerBtn.setColor(board.players[currentPlayerIndex].getColor());
                     nextPlayerBtn.repaint();
                     d.reset();
-                    repaint();
-                    updateUI();
-                }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {}
-            @Override
-            public void mouseReleased(MouseEvent e) {}
+                    rep();
+                }}
             @Override
             public void mouseEntered(MouseEvent e) {}
             @Override
@@ -128,25 +128,26 @@ public class Game extends JPanel {
         if (!selectedField.getFigure().isSamePlayer(board.players[currentPlayerIndex])){
             return;
         }
-        if (!selectedField.getFigure().isHome() && amount>=0) {
+        if (!selectedField.getFigure().isHome() && amount>0) {
             Field fieldInQuestion = board.course[selectedFieldIndex];
 
             // wenn eine runde für die figur gemacht wurde...
-            //if (selectedFieldIndex <= (fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson)){
+            int homeDepth = selectedFieldIndex-((fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson));
+            //System.out.println("depth"+homeDepth);
+            if (selectedFieldIndex > (fieldPerPerson*board.playerAmount)-((currentPlayerIndex-1) * fieldPerPerson)){
 
-            //    int homeDepth = selectedFieldIndex-((currentPlayerIndex * fieldPerPerson)-1);
+                //System.out.println(homeDepth);
+                //House h = board.players[currentPlayerIndex].getHome();
 
-            //    House h = board.players[currentPlayerIndex].getHome();
+                //// wenn das feld zu hause frei ist
+                //if (h.getRoom(homeDepth).isOccupied()){
+                //    Figure f = selectedField.clearField();
+                //    f.setReachedEnd(true);
+                //    h.getRoom(homeDepth).setFigure(f);
+                //}
 
-            //    // wenn das feld zu hause frei ist
-            //    if (h.getRoom(homeDepth).isOccupied()){
-            //        Figure f = selectedField.clearField();
-            //        f.setReachedEnd(true);
-            //        h.getRoom(homeDepth).setFigure(f);
-            //    }
-
-            //    return;
-            //}
+                //return;
+            }
 
             if (fieldInQuestion.isOccupied()){
                 fieldInQuestion.getFigure().kill();
@@ -159,8 +160,21 @@ public class Game extends JPanel {
             updateUI();
         }
     }
+    
+
+
+
+
+
+
+
+
+
+
+
     private void rep(){
         this.repaint();
+        this.updateUI();
     }
     @Override
     public void paintComponent(Graphics g) {
