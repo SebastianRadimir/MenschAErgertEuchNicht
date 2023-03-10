@@ -121,7 +121,7 @@ public enum DiceSide {
     public static DiceSide getSideByVal(int value) {
         return DiceSide.values()[value-1];
     }
-    private static void drawBackground(Graphics g, int xMin, int yMin, int xSize, int ySize){
+    public static void drawBackground(Graphics g, int xMin, int yMin, int xSize, int ySize){
 
         int w = xSize;
         int h = ySize;

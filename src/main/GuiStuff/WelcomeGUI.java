@@ -29,7 +29,7 @@ public class WelcomeGUI extends JFrame {
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
 
-    private NewWindow window;
+    private RuleWindow window;
 
     public WelcomeGUI() {
         setContentPane(MainPanel);
@@ -39,7 +39,7 @@ public class WelcomeGUI extends JFrame {
         AnzahlSpielfelderText.setSelectedIndex(7);
         anzahlDerSpielfiguren.setSelectedIndex(3);
         anzahlDerSpieler.setSelectedIndex(2);
-        window = new NewWindow();
+        window = new RuleWindow();
         window.setVisible(false);
 
         setTitle("Mensch ärgere dich nicht");

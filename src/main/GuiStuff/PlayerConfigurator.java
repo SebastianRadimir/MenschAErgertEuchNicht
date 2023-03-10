@@ -175,7 +175,7 @@ public class PlayerConfigurator extends JFrame{
 
         gameJFame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game g = new Game(new Board(ps));
+        Game g = new Game(new Board(ps),gameJFame);
 
         gameJFame.add(g);
 

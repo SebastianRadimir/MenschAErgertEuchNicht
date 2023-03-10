@@ -1,9 +1,7 @@
 package Backend;
 
-import GuiStuff.ArrowPanel;
-import GuiStuff.PlayerList;
-import GuiStuff.Settings;
-import GuiStuff.Winscreen;
+import GuiStuff.*;
+import com.sun.tools.javac.Main;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import static Backend.Dice.DiceSide.drawBackground;
 import static GuiStuff.Settings.*;
 
 public class Game extends JPanel {
@@ -22,8 +21,11 @@ public class Game extends JPanel {
     private PlayerList pl;
     private ArrowPanel nextPlayerBtn;
     private Winscreen ws;
-    public Game(Board board){
+    private RuleWindow rw;
+    public Game(Board board,JFrame parent){
         ws = null;
+        rw = new RuleWindow();
+        rw.setVisible(false);
         this.setLayout(null);
         currentPlayerIndex = 0;
         d = new DiceGUI();
@@ -57,12 +59,26 @@ public class Game extends JPanel {
             public void mousePressed(MouseEvent e) {}
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (ws != null){
-                    return;
-                }
                 Point b = MouseInfo.getPointerInfo().getLocation();
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
+                if (ws != null){
+                    if (ws.passedEnough()){
+
+                        if (boardCenterY+(int)(buttonSize*1.5)>ypos && boardCenterY+((int)(buttonSize*0.75))<ypos){
+                            parent.dispose();
+                            new GuiStuff.WelcomeGUI();
+                            return;
+                        }
+
+                        if (boardCenterY+(buttonSize*2.25)<ypos && boardCenterY+(buttonSize*3)>ypos){
+                            System.exit(0);
+                            return;
+                        }
+
+                    }
+                    return;
+                }
                 Field f = board.getField(xpos, ypos);
 
                 if (f!=null) {
@@ -93,11 +109,20 @@ public class Game extends JPanel {
                         moveFigure(f, d.getValue());
                     }
                 }
+
+                if (xpos<Settings.buttonSize && ypos<Settings.buttonSize && xpos>0 && ypos>0){
+                    if (rw.isActive()){
+                        rw.toFront();
+                    }
+                    rw.setVisible(true);
+                }
+
                 if (((Settings.board_width-(Settings.buttonSize*2))<xpos && xpos<Settings.board_width-Settings.buttonSize) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
                     d.roll();
                     rep();
                     return;
                 }
+
                 if (!d.canRoll() && ((Settings.board_width-Settings.buttonSize)<xpos && xpos<Settings.board_width) && ((Settings.board_height-Settings.buttonSize)<ypos && ypos<Settings.board_height)) {
 
                     nextPlayer();
@@ -137,7 +162,7 @@ public class Game extends JPanel {
                 int homeDepth = (selectedField.getFigure().getSteps()+amount)-(playerAmount*fieldPerPerson);
 
                 // heim ist out of bounds
-                if (homeDepth>figureAmount){
+                if (homeDepth>=figureAmount){
                     return;
                 }
                 House h = board.players[currentPlayerIndex].getHome();
@@ -172,6 +197,7 @@ public class Game extends JPanel {
     private void setCurrentWinner(){
         ws = new Winscreen(board.players[currentPlayerIndex]);
         pl.setVisible(false);
+        rw.setVisible(false);
         nextPlayerBtn.setVisible(false);
         rep();
         t = new Timer(16, ae -> {
@@ -200,8 +226,48 @@ public class Game extends JPanel {
 
         if (ws != null){
             ws.paintWinner(g);
+            if (ws.passedEnough()){
+
+                if (boardCenterY+(int)(buttonSize*1.5)>ypos && boardCenterY+((int)(buttonSize*0.75))<ypos){
+                    g.setColor(board_bg_color.darker().darker());
+                }else {
+                    g.setColor(board_bg_color.darker());
+                }
+
+                g.setFont(new Font(null, Font.PLAIN, buttonSize));
+
+                String options = "Nochmal Spielen";
+                int ls = options.length();
+
+                g.drawString(options, (int)(boardCenterX-((ls/4.0)*buttonSize)), boardCenterY+((int)(buttonSize*1.5)));
+
+
+                if (boardCenterY+(buttonSize*2.25)<ypos && boardCenterY+(buttonSize*3)>ypos){
+                    g.setColor(board_bg_color.darker().darker());
+                }else {
+                    g.setColor(board_bg_color.darker());
+                }
+                options = "Beenden";
+                ls = options.length();
+
+                g.drawString(options, (int)(boardCenterX-((ls/4.0)*buttonSize)), boardCenterY+(buttonSize*3));
+
+            }
+        }else {
+
+            Color ps = Settings.dice_BG_color;
+            Settings.dice_BG_color = board_bg_color.darker();
+            drawBackground(g,0,0,buttonSize,buttonSize);
+            Settings.dice_BG_color = ps;
+
+            g.setColor(board_bg_color.brighter());
+            double spl = buttonSize/6.0;
+            for (int i = 0; i < 7; i++) {
+                if (i%2==1){
+                    g.fillRect((int)(spl*1.25), (int)spl*i, (int)(buttonSize-(spl*2)), (int)(spl/2.0));
+                    g.fillOval((int)(spl/2.0), (int)spl*i,(int)(spl/2.0), (int)(spl/2.0));
+                }
+            }
         }
-
     }
-
 }
