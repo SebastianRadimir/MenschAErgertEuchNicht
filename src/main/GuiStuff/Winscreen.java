@@ -13,6 +13,7 @@ public class Winscreen extends JPanel {
     private Color color;
     private String name;
     private Star[] stars;
+    private Star specialSnowflake;
     int maxStars = 500;
 
     public Winscreen(Player winingP){
@@ -24,6 +25,10 @@ public class Winscreen extends JPanel {
             int s = new Random().nextInt(10,50);
             stars[i] = new Star(new Random().nextInt(1,board_width+(buttonSize*4)), new Random().nextInt(-board_width*2,-10),s,s, new Random().nextInt(3,100)/100.0, new Random().nextInt(3,9));
         }
+        specialSnowflake = new Star(-10,0, 1, 1, new Random().nextInt(3,100)/100.0, 3);
+    }
+    public boolean passedEnough(){
+        return specialSnowflake.isDeepEnough();
     }
 
     public void paintWinner(Graphics g) {
@@ -53,6 +58,8 @@ public class Winscreen extends JPanel {
         for (int i = 0; i < maxStars; i++) {
             g.fillPolygon(stars[i].nextIter());
         }
+        g.fillPolygon(specialSnowflake.nextIter());
+
         reload();
         repaint();
         updateUI();
@@ -107,5 +114,8 @@ class Star{
 
         return new Polygon(xPos,yPos,(spikes*2));
 
+    }
+    public boolean isDeepEnough(){
+        return yMin>=board_height;
     }
 }
