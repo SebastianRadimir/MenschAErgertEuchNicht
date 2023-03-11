@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MenschÄrgertEuchNicht">
+    <output-path>$PROJECT_DIR$/out/artifacts/MenschÄrgertEuchNicht</output-path>
+    <root id="archive" name="SkrabbleGit.jar">
+      <element id="module-output" name="SkrabbleGit" />
+    </root>
+  </artifact>
+</component>
