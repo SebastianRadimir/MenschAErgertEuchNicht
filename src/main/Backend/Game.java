@@ -25,6 +25,7 @@ public class Game extends JPanel {
     private double movePIndex = 0;
     private double endMoveIndex = 0;
     private Point[] travelPath;
+    private Field predictedPathField = null;
     public Game(Board board,JFrame parent){
         ws = null;
         travelPath = null;
@@ -48,11 +49,19 @@ public class Game extends JPanel {
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                Point b = MouseInfo.getPointerInfo().getLocation();
+                int xpos = (int) b.getX();
+                int ypos = (int) b.getY();
+                predict(board.getField(xpos, ypos));
                 rep();
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
+                Point b = MouseInfo.getPointerInfo().getLocation();
+                int xpos = (int) b.getX();
+                int ypos = (int) b.getY();
+                predict(board.getField(xpos, ypos));
                 rep();
             }
         });
@@ -160,6 +169,22 @@ public class Game extends JPanel {
         });
     }
 
+    private void predict(Field f){
+        predictedPathField = null;
+        if (f != null && f.isOccupied() && d.getValue() >= 1 && f.getFigure().isSamePlayer(currentPlayer())){
+            int selectedFieldIndex = ((f.getIndex() + d.getValue()) % (playerAmount*fieldPerPerson));
+            if (f.getFigure().getSteps()+d.getValue()>=(playerAmount*fieldPerPerson)) {
+                int homeDepth = (f.getFigure().getSteps() + d.getValue()) - (playerAmount * fieldPerPerson);
+
+                if (homeDepth >= figureAmount) {
+                    return;
+                }
+                predictedPathField = board.players[currentPlayerIndex].getHome().getRoom(homeDepth);
+                return;
+            }
+            predictedPathField = board.course[selectedFieldIndex];
+        }
+    }
     public static Player currentPlayer(){
         return board.players[currentPlayerIndex];
     }
@@ -284,11 +309,14 @@ public class Game extends JPanel {
 
             g.setColor(runner.getColor());
             Point p = travelPath[(int)movePIndex];
-            double dynamicSize = (Math.sin((movePIndex*Math.PI)*(1.0/endMoveIndex))*3)+1;
+            double dynamicSize = (Math.sin((movePIndex*Math.PI)*(1.0/endMoveIndex))*1.5)+1;
             double fs = (fieldSize/2.0)*dynamicSize;
 
             g.fillOval((int)(p.x-fs),(int)(p.y-fs),(int)(fieldSize*dynamicSize), (int)(fieldSize*dynamicSize));
 
+        }
+        if (predictedPathField != null){
+            predictedPathField.draw(g, predictedPathField.getX(),predictedPathField.getY());
         }
 
         d.paintComponent(g);
