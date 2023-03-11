@@ -15,8 +15,8 @@ public class Game extends JPanel {
 
     private Timer t;
     private final DiceGUI d;
-    private final Board board;
-    private int currentPlayerIndex;
+    private static Board board = null;
+    private static int currentPlayerIndex;
     private final PlayerList pl;
     private final ArrowPanel nextPlayerBtn;
     private Winscreen ws;
@@ -33,8 +33,8 @@ public class Game extends JPanel {
         currentPlayerIndex = 0;
         d = new DiceGUI();
         d.enableDice(3);
-        this.board = board;
-        pl = new PlayerList(this.board.players, board_height/(this.board.players.length*2),board_width/7);
+        Game.board = board;
+        pl = new PlayerList(Game.board.players, board_height/(Game.board.players.length*2),board_width/7);
         pl.setLocation(board_width-(board_width/7),0);
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
         this.add(pl);
@@ -62,6 +62,9 @@ public class Game extends JPanel {
             public void mousePressed(MouseEvent e) {}
             @Override
             public void mouseReleased(MouseEvent e) {
+                if (runner != null){
+                    return;
+                }
                 Point b = MouseInfo.getPointerInfo().getLocation();
                 int xpos = (int) b.getX();
                 int ypos = (int) b.getY();
@@ -111,6 +114,18 @@ public class Game extends JPanel {
                     if (board.players[currentPlayerIndex].getHomeFigAmount() == 0 || d.getValue() != 6){
                         moveFigure(f, d.getValue());
                     }
+
+                }
+
+                House h = currentPlayer().getHome();
+                f = h.getField(xpos, ypos);
+                if (f != null){
+                    if (h.movePlayerInHome(f,d.getValue())){
+                        pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
+                        d.reset();
+                        rep();
+                        return;
+                    }
                 }
 
                 if (xpos<Settings.buttonSize && ypos<Settings.buttonSize && xpos>0 && ypos>0){
@@ -143,6 +158,9 @@ public class Game extends JPanel {
         });
     }
 
+    public static Player currentPlayer(){
+        return board.players[currentPlayerIndex];
+    }
     public void nextPlayer(){
         currentPlayerIndex = (currentPlayerIndex+1)%board.playerAmount;
         pl.setPlayerToGreen(board.players[currentPlayerIndex].getPlayerName());
@@ -182,6 +200,7 @@ public class Game extends JPanel {
                 return;
             }
 
+
             Field fieldInQuestion = board.course[selectedFieldIndex];
             if (fieldInQuestion.isOccupied()){
                 fieldInQuestion.getFigure().kill();
@@ -190,8 +209,9 @@ public class Game extends JPanel {
             selectedField.getFigure().addSteps(amount);
 
             runner = selectedField.clearField();
-            movePIndex = ((((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson))*selectedFieldIndex));
-            endMoveIndex = ((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson))*(selectedFieldIndex+amount);
+            double iterStepAmount = ((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson));
+            movePIndex = iterStepAmount*selectedFieldIndex;
+            endMoveIndex = iterStepAmount*(selectedFieldIndex+amount);
             t = new Timer(16, ae -> {
                 startRunning(fieldInQuestion);
                 repaint();
@@ -245,7 +265,7 @@ public class Game extends JPanel {
         g.setColor(board_bg_color);
         g.fillRect(0, 0, board_width + 10, board_height + 10);
 
-        this.board.draw(g, xpos, ypos);
+        board.draw(g, xpos, ypos);
 
         if (runner != null){
 
