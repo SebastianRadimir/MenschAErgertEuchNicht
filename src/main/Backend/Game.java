@@ -24,8 +24,10 @@ public class Game extends JPanel {
     private Figure runner;
     private double movePIndex = 0;
     private double endMoveIndex = 0;
+    private Point[] travelPath;
     public Game(Board board,JFrame parent){
         ws = null;
+        travelPath = null;
         runner = null;
         rw = new RuleWindow();
         rw.setVisible(false);
@@ -177,6 +179,7 @@ public class Game extends JPanel {
             return;
         }
         if (!selectedField.getFigure().isHome() && amount>0) {
+            Field fieldInQuestion = board.course[selectedFieldIndex];
             // wenn eine runde für die figur gemacht wurde...
             if (selectedField.getFigure().getSteps()+amount>=(playerAmount*fieldPerPerson)){
                 int homeDepth = (selectedField.getFigure().getSteps()+amount)-(playerAmount*fieldPerPerson);
@@ -200,8 +203,6 @@ public class Game extends JPanel {
                 return;
             }
 
-
-            Field fieldInQuestion = board.course[selectedFieldIndex];
             if (fieldInQuestion.isOccupied()){
                 fieldInQuestion.getFigure().kill();
                 pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
@@ -209,9 +210,20 @@ public class Game extends JPanel {
             selectedField.getFigure().addSteps(amount);
 
             runner = selectedField.clearField();
-            double iterStepAmount = ((double)circlePrecision/((double)playerAmount*(double)fieldPerPerson));
-            movePIndex = iterStepAmount*selectedFieldIndex;
-            endMoveIndex = iterStepAmount*(selectedFieldIndex+amount);
+            movePIndex = 0;
+
+            Point from = new Point(selectedField.getX(),selectedField.getY());
+            Point to = new Point(fieldInQuestion.getX(),fieldInQuestion.getY());
+
+            endMoveIndex = 16*amount;
+            double xStep = (to.x-from.x)/endMoveIndex;
+            double yStep = (to.y-from.y)/endMoveIndex;
+
+            travelPath = new Point[(int)endMoveIndex];
+            for (int i = 0; i < endMoveIndex; i++) {
+                travelPath[i] = new Point((int)((xStep*i)+from.x),(int)((yStep*i)+from.y));
+            }
+
             t = new Timer(16, ae -> {
                 startRunning(fieldInQuestion);
                 repaint();
@@ -225,12 +237,13 @@ public class Game extends JPanel {
 
         movePIndex+=1;
 
-        if (movePIndex>=endMoveIndex) {
+        if (movePIndex>=endMoveIndex-1) {
             movePIndex = 0;
             endMoveIndex = 0;
             t.stop();
             fieldInQuestion.setFigure(runner);
             runner = null;
+            travelPath = null;
             t=null;
             pl.updateFiguresAtHome(board.players[currentPlayerIndex]);
             d.reset();
@@ -267,12 +280,14 @@ public class Game extends JPanel {
 
         board.draw(g, xpos, ypos);
 
-        if (runner != null){
+        if (runner != null && travelPath != null){
 
-            int fs = fieldSize/2;
             g.setColor(runner.getColor());
-            Point p = board.getPoint((int)movePIndex);
-            g.fillOval(p.x-fs,p.y-fs,fieldSize, fieldSize);
+            Point p = travelPath[(int)movePIndex];
+            double dynamicSize = (Math.sin((movePIndex*Math.PI)*(1.0/endMoveIndex))*3)+1;
+            double fs = (fieldSize/2.0)*dynamicSize;
+
+            g.fillOval((int)(p.x-fs),(int)(p.y-fs),(int)(fieldSize*dynamicSize), (int)(fieldSize*dynamicSize));
 
         }
 
