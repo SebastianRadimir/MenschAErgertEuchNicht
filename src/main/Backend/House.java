@@ -7,7 +7,7 @@ import static GuiStuff.Settings.*;
 public class House {
 
     private final Player owner;
-    public Field[] rooms;
+    private Field[] rooms;
 
     public House(Player owner, Field[] rooms){
 
@@ -16,12 +16,55 @@ public class House {
 
     }
     public Field getRoom(int i){
-        if (i>=rooms.length){
+        if (i>=rooms.length || i<0){
             return null;
         }
         return rooms[i];
     }
+    public boolean movePlayerInHome(Field selected, int amount){
 
+        boolean fieldIsOurs = false;
+        for (Field room:rooms) {
+            if (room.equals(selected)){
+                fieldIsOurs = true;
+                break;
+            }
+        }
+        if (amount<=0 || !fieldIsOurs || !selected.isOccupied()){
+            return false;
+        }
+        int selectedFieldI = selected.getIndex();
+        Field fieldInQuestion = getRoom(selectedFieldI+amount);
+        if (fieldInQuestion != null){
+            if (!fieldInQuestion.isOccupied()){
+                Figure f = selected.clearField();
+                fieldInQuestion.setFigure(f);
+
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Field getField(int xPos, int yPos){
+
+        for (int i = 0; i < rooms.length; i++) {
+
+            Field f = rooms[i];
+
+            int x = f.getX();
+            int y = f.getY();
+
+            if (Math.sqrt(((xPos - x)*(xPos - x)) + ((yPos - y) * (yPos - y))) <= (fieldSize/2.0)){
+                return f;
+            }
+        }
+        return null;
+    }
+
+    public Field[] getRooms() {
+        return rooms;
+    }
     public void draw(Graphics g, int mpx, int mpy){
 
         g.setColor(board_line_color);
@@ -32,9 +75,15 @@ public class House {
         for (Field room : rooms) {
             int x = room.getX();
             int y = room.getY();
-            room.draw(g,mpx ,mpy);
+            room.draw(g, mpx, mpy);
             g.setColor(c);
-            g.drawOval(x-(fieldSize/2), y-(fieldSize/2), fieldSize,fieldSize);
+            g.drawOval(x - (fieldSize / 2), y - (fieldSize / 2), fieldSize, fieldSize);
+
+            if (Math.sqrt(((mpx - x) * (mpx - x)) + ((mpy - y) * (mpy - y))) <= (fieldSize / 2.0)) {
+                g2.setStroke(new BasicStroke(fieldSize/3.0f));
+                g.setColor(highlight_color);
+                g.drawOval(x - (fieldSize / 2), y - (fieldSize / 2), fieldSize, fieldSize);
+            }
         }
     }
 

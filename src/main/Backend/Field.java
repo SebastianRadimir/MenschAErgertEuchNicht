@@ -52,7 +52,11 @@ public class Field{
     public void draw(Graphics g, int mousePosX, int mousePosY) {
 
         if (isOccupied()) {
-            g.setColor(getFigure().getColor());
+            if (getFigure().isSamePlayer(Game.currentPlayer())){
+                g.setColor(getFigure().getColor().brighter());
+            }else {
+                g.setColor(getFigure().getColor().darker());
+            }
         } else {
             g.setColor(board_tile_color);
         }
@@ -67,6 +71,8 @@ public class Field{
             g.setColor(board_tile_color);
             g.drawOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
         }
+        g.setColor(new Color(0,0,0));
+        g.drawString(getIndex()+"",posX,posY);
     }
 
 }
