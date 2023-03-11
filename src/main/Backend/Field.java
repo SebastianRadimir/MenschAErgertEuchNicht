@@ -61,7 +61,6 @@ public class Field{
             g.setColor(board_tile_color);
         }
 
-
         g.fillOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
 
         if (Math.sqrt(((mousePosX - posX)*(mousePosX - posX)) + ((mousePosY - posY) * (mousePosY - posY))) <= (fieldSize/2.0)) {
@@ -71,8 +70,7 @@ public class Field{
             g.setColor(board_tile_color);
             g.drawOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
         }
-        g.setColor(new Color(0,0,0));
-        g.drawString(getIndex()+"",posX,posY);
+
     }
 
 }
