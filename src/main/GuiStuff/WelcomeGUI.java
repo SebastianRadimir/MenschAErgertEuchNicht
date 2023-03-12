@@ -43,7 +43,7 @@ public class WelcomeGUI extends JFrame {
         window = new RuleWindow();
         window.setVisible(false);
 
-        setTitle("Mensch ärgere dich nicht");
+        setTitle("Mensch, ärgert euch nicht");
         setSize(400, 300);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

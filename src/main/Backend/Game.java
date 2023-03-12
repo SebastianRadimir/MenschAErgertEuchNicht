@@ -28,7 +28,7 @@ public class Game extends JPanel {
     private final RuleWindow rw;
     private Figure runner;
     private double movePIndex = 0;
-    private double endMoveIndex = 0;
+    private int endMoveIndex = 0;
     private Point[] travelPath;
     private Field predictedPathField = null;
     private final int animationSteps = 40;
@@ -186,7 +186,7 @@ public class Game extends JPanel {
             if (board_width<1920) {
                 smallImg = "Smol";
             }
-            String name = "src/assets/woodenplank"+new Random().nextInt(1,5)+""+smallImg+".jpg";
+            String name = "src/assets/woodenplank"+new Random().nextInt(1,4)+""+smallImg+".jpg";
 
             return ImageIO.read(new File(name));
         } catch (IOException e) {
@@ -251,18 +251,14 @@ public class Game extends JPanel {
                 }
                 return;
             }
-
-            if (fieldInQuestion.isOccupied()){
-                fieldInQuestion.getFigure().kill();
-                pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
-            }
             selectedField.getFigure().addSteps(amount);
 
             runner = selectedField.clearField();
             movePIndex = 0;
 
             endMoveIndex = animationSteps*amount;
-            travelPath = new Point[(int) endMoveIndex];
+            travelPath = new Point[endMoveIndex];
+
             for (int i = 0; i < amount; i++) {
 
                 int realIndex = ((selectedField.getIndex()+i) );
@@ -290,7 +286,13 @@ public class Game extends JPanel {
 
         movePIndex+=1;
 
-        if (movePIndex>=endMoveIndex-1) {
+        if (movePIndex>=(endMoveIndex-1)) {
+
+            if (fieldInQuestion.isOccupied()){
+                fieldInQuestion.getFigure().kill();
+                pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
+            }
+
             movePIndex = 0;
             endMoveIndex = 0;
             t.stop();
@@ -336,14 +338,14 @@ public class Game extends JPanel {
         g.fillRect(0, 0, board_width + 10, board_height + 10);
         if (bgImage != null) {
             g.drawImage(bgImage, 0, 0, this);
-            g.setColor(board_bg_color2.darker());
+            g.setColor(board_bg_color2.brighter());
             g.fillRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
 
             Graphics2D g2 = (Graphics2D) g;
             Stroke prevS = g2.getStroke();
             g2.setStroke(new BasicStroke(buttonSize/10));
 
-            g.setColor(board_bg_color2.brighter());
+            g.setColor(board_bg_color2.darker());
             g.drawRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
             g2.setStroke(prevS);
         }
@@ -370,23 +372,23 @@ public class Game extends JPanel {
             if (ws.passedEnough()){
 
                 if (boardCenterY+(int)(buttonSize*1.5)>ypos && boardCenterY+((int)(buttonSize*0.75))<ypos){
-                    g.setColor(board_bg_color.darker().darker());
+                    g.setColor(highlight_color);
                 }else {
-                    g.setColor(board_bg_color.darker());
+                    g.setColor(highlight_color.darker());
                 }
 
                 g.setFont(new Font(null, Font.PLAIN, buttonSize));
 
-                String options = "Nochmal Spielen";
+                String options = "Nochmal spielen";
                 int ls = options.length();
 
                 g.drawString(options, (int)(boardCenterX-((ls/4.0)*buttonSize)), boardCenterY+((int)(buttonSize*1.5)));
 
 
                 if (boardCenterY+(buttonSize*2.25)<ypos && boardCenterY+(buttonSize*3)>ypos){
-                    g.setColor(board_bg_color.darker().darker());
+                    g.setColor(highlight_color);
                 }else {
-                    g.setColor(board_bg_color.darker());
+                    g.setColor(highlight_color.darker());
                 }
                 options = "Beenden";
                 ls = options.length();
