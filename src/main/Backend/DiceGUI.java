@@ -38,6 +38,9 @@ public class DiceGUI extends JPanel {
     }
     @Override
     public void paintComponent(Graphics g){
+        if (getBackground().getAlpha() == 0){
+            return;
+        }
         dp.draw(g, Settings.board_width-(Settings.buttonSize*2),Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
     }
     public int getValue(){

@@ -2,11 +2,16 @@ package Backend;
 
 import GuiStuff.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 import static Backend.Dice.DiceSide.drawBackground;
 import static GuiStuff.Settings.*;
@@ -26,8 +31,10 @@ public class Game extends JPanel {
     private double endMoveIndex = 0;
     private Point[] travelPath;
     private Field predictedPathField = null;
-    private int animationSteps = 45;
+    private final int animationSteps = 40;
+    private final BufferedImage bgImage;
     public Game(Board board,JFrame parent){
+        bgImage = getBGImage();
         ws = null;
         travelPath = null;
         runner = null;
@@ -46,6 +53,9 @@ public class Game extends JPanel {
         this.add(nextPlayerBtn);
         nextPlayerBtn.setSize(buttonSize, buttonSize);
         nextPlayerBtn.setLocation(Settings.board_width-Settings.buttonSize, board_height-Settings.buttonSize);
+        if (bgImage != null) {
+            nextPlayerBtn.setBackground(new Color(0, 0, 0, 0));
+        }
         nextPlayerBtn.setVisible(true);
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
@@ -169,7 +179,20 @@ public class Game extends JPanel {
             public void mouseExited(MouseEvent e) {}
         });
     }
+    private BufferedImage getBGImage() {
 
+        try {
+            String smallImg = "";
+            if (board_width<1920) {
+                smallImg = "Smol";
+            }
+            String name = "src/assets/woodenplank"+new Random().nextInt(1,5)+""+smallImg+".jpg";
+
+            return ImageIO.read(new File(name));
+        } catch (IOException e) {
+            return null;
+        }
+    }
     private void predict(Field f){
         predictedPathField = null;
         if (f != null && f.isOccupied() && d.getValue() >= 1 && f.getFigure().isSamePlayer(currentPlayer())){
@@ -286,6 +309,9 @@ public class Game extends JPanel {
         ws = new Winscreen(board.players[currentPlayerIndex]);
         pl.setVisible(false);
         rw.setVisible(false);
+        board_bg_color = new Color(0,0,0,0);
+        d.setVisible(false);
+        d.setBackground(board_bg_color);
         nextPlayerBtn.setVisible(false);
         rep();
         t = new Timer(16, ae -> {
@@ -305,8 +331,22 @@ public class Game extends JPanel {
         int xpos = (int) b.getX();
         int ypos = (int) b.getY();
 
-        g.setColor(board_bg_color);
+        g.setColor(board_bg_color2);
+
         g.fillRect(0, 0, board_width + 10, board_height + 10);
+        if (bgImage != null) {
+            g.drawImage(bgImage, 0, 0, this);
+            g.setColor(board_bg_color2.darker());
+            g.fillRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
+
+            Graphics2D g2 = (Graphics2D) g;
+            Stroke prevS = g2.getStroke();
+            g2.setStroke(new BasicStroke(buttonSize/10));
+
+            g.setColor(board_bg_color2.brighter());
+            g.drawRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
+            g2.setStroke(prevS);
+        }
 
         board.draw(g, xpos, ypos);
 
@@ -314,7 +354,6 @@ public class Game extends JPanel {
 
             g.setColor(runner.getColor());
             Point p = travelPath[(int)movePIndex];
-            //double dynamicSize = (Math.sin((movePIndex*Math.PI)*(1.0/endMoveIndex))*1.5)+1;
             double dynamicSize = Math.abs(Math.sin((movePIndex*Math.PI)*(1.0/(endMoveIndex)*(endMoveIndex/(double)animationSteps)))*1.5)+1;
             double fs = (fieldSize/2.0)*dynamicSize;
 
@@ -325,9 +364,8 @@ public class Game extends JPanel {
             predictedPathField.draw(g, predictedPathField.getX(),predictedPathField.getY());
         }
 
-        d.paintComponent(g);
-
         if (ws != null){
+            d.paintComponent(g);
             ws.paintWinner(g);
             if (ws.passedEnough()){
 
@@ -358,6 +396,7 @@ public class Game extends JPanel {
             }
         }else {
 
+            d.paintComponent(g);
             Color ps = Settings.dice_BG_color;
             Settings.dice_BG_color = board_bg_color.darker();
             drawBackground(g,0,0,buttonSize,buttonSize);
