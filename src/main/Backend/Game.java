@@ -182,11 +182,7 @@ public class Game extends JPanel {
     private BufferedImage getBGImage() {
 
         try {
-            String smallImg = "";
-            if (board_width<1920) {
-                smallImg = "Smol";
-            }
-            String name = "src/assets/woodenplank"+new Random().nextInt(1,4)+""+smallImg+".jpg";
+            String name = "src/assets/woodenplank"+new Random().nextInt(1,4)+".jpg";
 
             return ImageIO.read(new File(name));
         } catch (IOException e) {
