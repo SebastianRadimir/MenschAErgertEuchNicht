@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.UIManager.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Objects;
 
 public class WelcomeGUI extends JFrame {
     private JLabel AnzSpieler;
@@ -29,7 +30,7 @@ public class WelcomeGUI extends JFrame {
     private int anzahlSpieler;
     private int anzahlSpielfiguren;
 
-    private NewWindow window;
+    private final RuleWindow window;
 
     public WelcomeGUI() {
         setContentPane(MainPanel);
@@ -39,7 +40,7 @@ public class WelcomeGUI extends JFrame {
         AnzahlSpielfelderText.setSelectedIndex(7);
         anzahlDerSpielfiguren.setSelectedIndex(3);
         anzahlDerSpieler.setSelectedIndex(2);
-        window = new NewWindow();
+        window = new RuleWindow();
         window.setVisible(false);
 
         setTitle("Mensch ärgere dich nicht");
@@ -54,11 +55,11 @@ public class WelcomeGUI extends JFrame {
                 if (AnzahlSpielfelderText.getSelectedIndex() == -1 || anzahlDerSpieler.getSelectedIndex() == -1 || anzahlDerSpielfiguren.getSelectedIndex() == -1) { // || containsOnlyValues(AnzSpielerText) || containsOnlyValues(AnzahlSpielfigurenText)
                     JOptionPane.showMessageDialog(null, "Fehlerhafte Eingabe");
                 } else {
-                    anzahlSpielfiguren = Integer.parseInt(anzahlDerSpielfiguren.getSelectedItem().toString().trim());
-                    anzahlSpieler = Integer.parseInt(anzahlDerSpieler.getSelectedItem().toString().trim());
-                    anzahlSpielfelder = Integer.parseInt(AnzahlSpielfelderText.getSelectedItem().toString().trim());
+                    anzahlSpielfiguren = Integer.parseInt(Objects.requireNonNull(anzahlDerSpielfiguren.getSelectedItem()).toString().trim());
+                    anzahlSpieler = Integer.parseInt(Objects.requireNonNull(anzahlDerSpieler.getSelectedItem()).toString().trim());
+                    anzahlSpielfelder = Integer.parseInt(Objects.requireNonNull(AnzahlSpielfelderText.getSelectedItem()).toString().trim());
 
-                    PlayerConfigurator pc = new PlayerConfigurator(anzahlSpieler, anzahlSpielfiguren, anzahlSpielfelder);          //start Customizer
+                    new PlayerConfigurator(anzahlSpieler, anzahlSpielfiguren, anzahlSpielfelder);          //start Customizer
 
                     anzahlDerSpielfiguren.setSelectedIndex(3);
                     anzahlDerSpieler.setSelectedIndex(2);
@@ -81,11 +82,7 @@ public class WelcomeGUI extends JFrame {
         multiplayerRadioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(multiplayerRadioButton.isSelected()){
-                    multiplayerPanel.setVisible(true);
-                }else{
-                    multiplayerPanel.setVisible(false);
-                }
+                multiplayerPanel.setVisible(multiplayerRadioButton.isSelected());
             }
         });
     }
@@ -104,15 +101,4 @@ public class WelcomeGUI extends JFrame {
         new WelcomeGUI();
     }
 
-    public int getAnzahlSpielfelder() {
-        return anzahlSpielfelder;
-    }
-
-    public int getAnzahlSpieler() {
-        return anzahlSpieler;
-    }
-
-    public int getAnzahlSpielfiguren() {
-        return anzahlSpielfiguren;
-    }
 }

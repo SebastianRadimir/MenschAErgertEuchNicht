@@ -19,36 +19,34 @@ public class PlayerList extends JPanel {
     private final Player[] playerlist;
     private final ArrayList<JPanel> colorPanelList = new ArrayList<>();
     private final ArrayList<JLabel> figuresAtHomeLabelList = new ArrayList<>();
-    private String playerNameTitle = "Spielerliste";
-    private String figuresAtHomeTitle = "Figuren Zuhause";
+    private final String playerNameTitle = "Spielerliste";
     private final Color notPlayingColor = new Color(200,0,0);
     private final Color isPlayingColor = new Color(0,200,0);
     private Player actualPlayer;
-    private Color defaultBackground;
+    private final Color defaultBackground;
     //Constructor---------------------------------------
     /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param playerlist_p Array of all Players that need to be shown
      * @param heightPerPlayer_p Height per Player
      * @param widthOfWindow_p Width of the whole Window
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p,Color backgroundColor_p){
+    public PlayerList(Player[] playerlist_p, int heightPerPlayer_p,int widthOfWindow_p){
         playerlist = playerlist_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         heightPerPlayer = heightPerPlayer_p;
         widthOfWindow = widthOfWindow_p;
         createPanel();
+        actualPlayerUpdater();
     }
 
     /**
      * initilaze a PlayerList JPanel where every Player is listed
      * @param players_p Array of all Players that need to be shown
-     * @param backgroundColor_p The Color that the Background should use
      */
-    public PlayerList(Player[] players_p,Color backgroundColor_p){
+    public PlayerList(Player[] players_p){
         playerlist = players_p;
-        defaultBackground = backgroundColor_p;
+        defaultBackground = Settings.board_bg_color;
         createPanel();
         actualPlayerUpdater();
     }
@@ -58,7 +56,8 @@ public class PlayerList extends JPanel {
         setSize(widthOfWindow,(playerlist.length + 1) * heightPerPlayer + 10);
         setBackground(defaultBackground);
 
-        add(createRowWithPlayerAndStats(defaultBackground,playerNameTitle,figuresAtHomeTitle));
+        String figuresAtHomeTitle = "Figuren Zuhause";
+        add(createRowWithPlayerAndStats(defaultBackground,playerNameTitle, figuresAtHomeTitle));
 
         //add for every player a new row with Statuscolor,Name and Figures at Home
         for (Player player:playerlist) {
@@ -103,11 +102,11 @@ public class PlayerList extends JPanel {
     }
     private Color invertColor(Color c){
         //Bruda akzeptier mal so #StackOverFlow
-        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000;
+        double y = (299 * c.getRed() + 587 * c.getGreen() + 114 * c.getBlue()) / 1000.0;
         return y >= 128 ? Color.black : Color.white;
     }
     private void actualPlayerUpdater(){
-        Runnable helloRunnable = () -> updateactuallPlayerColor();
+        Runnable helloRunnable = this::updateactuallPlayerColor;
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         executor.scheduleAtFixedRate(helloRunnable, 1000, 200, TimeUnit.MILLISECONDS);
     }
@@ -116,25 +115,6 @@ public class PlayerList extends JPanel {
             for(JPanel panel:colorPanelList){
                 if(playerNameTitle.equals(panel.getName())){
                     panel.setBackground(actualPlayer.getColor());
-                }
-            }
-        }
-    }
-
-
-    /**
-     * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor
-     * @param playerName_p insert the playername, u can use player.getName()
-     */
-    public void setPlayerToGreen(String playerName_p){
-        for(JPanel panel:colorPanelList){
-            panel.setBackground(notPlayingColor);
-            if(playerName_p.equals(panel.getName())){
-                panel.setBackground(isPlayingColor);
-                for (Player p:playerlist) {
-                    if(p.getPlayerName().equals(playerName_p)){
-                        actualPlayer = p;
-                    }
                 }
             }
         }
@@ -169,6 +149,41 @@ public class PlayerList extends JPanel {
     }
 
     /**
+     * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor
+     * @param playerName_p insert the playername, u can use player.getName()
+     */
+    public void setPlayerToGreen(String playerName_p){
+        for(JPanel panel:colorPanelList){
+            panel.setBackground(notPlayingColor);
+            if(playerName_p.equals(panel.getName())){
+                panel.setBackground(isPlayingColor);
+                for (Player p:playerlist) {
+                    if(p.getPlayerName().equals(playerName_p)){
+                        actualPlayer = p;
+                        updateactuallPlayerColor();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * will update the figures that are still home from the player that is given
+     * if the method is called
+     * @param playerName_p insert the Player.getPlayerName() for best use
+     */
+    public void updateFiguresAtHome(Player playerName_p){
+        for (JLabel label :figuresAtHomeLabelList) {
+            if(label.getName().equals(playerName_p.getPlayerName())){
+                //we found the Label we want to update
+
+                //compare the playerName to the Player-class to get actual stats
+                label.setText(playerName_p.getHomeFigAmount() + "/" + playerName_p.getFigures().length);
+            }
+        }
+    }
+
+    /**
      * new main function to test manually the JPanel
      */
     public static void main (String[] args) {
@@ -180,7 +195,7 @@ public class PlayerList extends JPanel {
         listOfPlayer[1] = new Player(2,3,Color.GREEN,"Player 2");
         listOfPlayer[2] = new Player(3,3,Color.RED,"Player 3");
 
-        PlayerList test = new PlayerList(listOfPlayer,Color.BLACK);
+        PlayerList test = new PlayerList(listOfPlayer);
         frame.add(test);
         frame.setSize(300,200);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

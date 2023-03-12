@@ -121,7 +121,7 @@ public enum DiceSide {
     public static DiceSide getSideByVal(int value) {
         return DiceSide.values()[value-1];
     }
-    private static void drawBackground(Graphics g, int xMin, int yMin, int xSize, int ySize){
+    public static void drawBackground(Graphics g, int xMin, int yMin, int xSize, int ySize){
 
         int w = xSize;
         int h = ySize;
@@ -134,7 +134,7 @@ public enum DiceSide {
 
         g.setColor(Settings.dice_BG_color);
 
-        g.fillRect(xMin,yMin+barSize,yMin+w,h-(barSize*2));
+        g.fillRect(xMin,yMin+barSize,w,h-(barSize*2));
         g.fillRect(xMin+barSize,yMin,w-(barSize*2),h);
 
         g.fillOval(xMin,yMin,barSize*2,barSize*2);

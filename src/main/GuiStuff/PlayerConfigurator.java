@@ -14,9 +14,9 @@ import java.util.Random;
 import javax.swing.*;
 
 public class PlayerConfigurator extends JFrame{
-    private int numPlayers;
-    private int figureAmount;
-    private int fieldPerPerson;
+    private final int numPlayers;
+    private final int figureAmount;
+    private final int fieldPerPerson;
     private final Color[] color;
     private final JTextField[] playerNameFields;
     private final JButton[] colorButtons;
@@ -117,7 +117,13 @@ public class PlayerConfigurator extends JFrame{
 
                 Player[] ps = new Player[numPlayers];
                 for (int i = 0; i < numPlayers; i++){
-                    ps[i] = new Player(i,figureAmount, color[i], playerNameFields[i].getText());
+                    String rs;
+                    try{
+                        rs = playerNameFields[i].getText().substring(0,20);
+                    }catch (Exception ignore){
+                        rs = playerNameFields[i].getText();
+                    }
+                    ps[i] = new Player(i,figureAmount, color[i], rs);
                 }
                 dispose();
                 startGame(ps);
@@ -169,7 +175,7 @@ public class PlayerConfigurator extends JFrame{
 
         gameJFame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Game g = new Game(new Board(ps));
+        Game g = new Game(new Board(ps),gameJFame);
 
         gameJFame.add(g);
 

@@ -33,11 +33,27 @@ public class Board {
 
         double div = PI2/(playerAmount*fieldPerPerson);
         for (int i = 3; i < (playerAmount*fieldPerPerson)+3; i++) {
-            double ni = div*(i+0.5);
+            double ni = div*i;//*(i+0.5);
 
             double pn = getBoardShape(ni);
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
+    }
+    public Point getPoint(int i){
+        i = (i%circlePrecision);
+        return new Point(courseLineArrX[i], courseLineArrY[i]);
+    }
+
+    public Player getPlayerByFigure(Figure fig){
+
+        for (int i = 0; i < playerAmount; i++) {
+
+            if (fig.getColor().equals(players[i].getColor())){
+                return players[i];
+            }
+
+        }
+        return null;
     }
 
     public Field getField(int xPos, int yPos){
@@ -73,8 +89,9 @@ public class Board {
         g2.setStroke(new BasicStroke(fieldSize/5.0f));
         for (int i = 0; i < playerAmount; i++) {
             g.setColor(players[i].getColor());
-            int x = course[i*fieldPerPerson].getX();
-            int y = course[i*fieldPerPerson].getY();
+            Field f = course[i*fieldPerPerson];
+            int x = f.getX();
+            int y = f.getY();
             g.drawOval(x - (fieldSize / 2),y - (fieldSize / 2), fieldSize, fieldSize);
         }
 

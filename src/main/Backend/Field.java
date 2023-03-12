@@ -10,7 +10,6 @@ public class Field{
     private final int posY;
     private Figure holdingFigure;
     private final int posIndex;
-
     public Field(int index, int posX, int posY){
         holdingFigure = null;
         posIndex = index;
@@ -28,6 +27,7 @@ public class Field{
     }
 
     public void setFigure(Figure f){
+        f.setHome(false);
         this.holdingFigure = f;
     }
 
@@ -36,6 +36,7 @@ public class Field{
     }
 
     public Figure clearField(){
+        this.holdingFigure.setHome(true);
         Figure pf = this.holdingFigure;
         this.holdingFigure = null;
         return pf;
@@ -51,7 +52,11 @@ public class Field{
     public void draw(Graphics g, int mousePosX, int mousePosY) {
 
         if (isOccupied()) {
-            g.setColor(getFigure().getColor());
+            if (getFigure().isSamePlayer(Game.currentPlayer())){
+                g.setColor(getFigure().getColor().brighter());
+            }else {
+                g.setColor(getFigure().getColor().darker());
+            }
         } else {
             g.setColor(board_tile_color);
         }
@@ -65,6 +70,7 @@ public class Field{
             g.setColor(board_tile_color);
             g.drawOval(posX - (fieldSize / 2), posY - (fieldSize / 2), fieldSize, fieldSize);
         }
+
     }
 
 }

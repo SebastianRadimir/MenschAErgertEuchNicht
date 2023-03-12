@@ -7,13 +7,11 @@ import GuiStuff.Settings;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 public class DiceGUI extends JPanel {
 
     private int canRoll;
-    private DicePanel dp;
+    private final DicePanel dp;
     private int value = -1;
 
     public DiceGUI(){
@@ -30,19 +28,23 @@ public class DiceGUI extends JPanel {
     }
 
     public void roll(){
+        //dp.setSide(DiceSide.getRandomDiceSide());
         if (canRoll()) {
             value = DiceDialogManager.showDialog();
-            dp = new DicePanel(DiceSide.getRandomDiceSide());
-            canRoll =  value == 6?1: canRoll - 1; // if (value == 6 ) => 1 mal noch else => canRoll-1 mal rollen
+            canRoll =  value == 6?1: canRoll - 1;
             dp.setSide(DiceSide.getSideByVal(value));
         }
 
     }
     @Override
     public void paintComponent(Graphics g){
-        dp.draw(g, Settings.board_width-Settings.buttonSize,Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
+        dp.draw(g, Settings.board_width-(Settings.buttonSize*2),Settings.board_height-Settings.buttonSize,Settings.buttonSize,Settings.buttonSize);
     }
     public int getValue(){
         return value;
+    }
+
+    public void reset() {
+        value = -1;
     }
 }
