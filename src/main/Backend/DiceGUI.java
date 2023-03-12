@@ -28,7 +28,7 @@ public class DiceGUI extends JPanel {
     }
 
     public void roll(){
-        dp.setSide(DiceSide.getRandomDiceSide());
+        //dp.setSide(DiceSide.getRandomDiceSide());
         if (canRoll()) {
             value = DiceDialogManager.showDialog();
             canRoll =  value == 6?1: canRoll - 1;
