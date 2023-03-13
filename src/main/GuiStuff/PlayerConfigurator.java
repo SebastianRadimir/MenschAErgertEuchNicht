@@ -114,7 +114,8 @@ public class PlayerConfigurator extends JFrame{
                 Settings.fieldPerPerson = fieldPerPerson;  // max 10
                 Settings.playerAmount = numPlayers;  // max 20
                 Settings.figureAmount = figureAmount;  // max 25
-                board_bg_color2 = new Color(36,70,103);
+                Settings.board_bg_color = new Color(36,70,103);
+                Settings.board_bg_color2 = new Color(36,70,103);
                 Settings.reload();
 
                 Player[] ps = new Player[numPlayers];

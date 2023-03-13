@@ -23,7 +23,7 @@ public class RuleWindow extends JFrame{
             9. Der Spieler, dessen Felder im Haus als erstes besetzt sind, hat gewonnen.""");
     public RuleWindow(){
         setResizable(false);
-        setTitle("Regeln");//funktioniert noch nicht
+        setTitle("Regeln");
         label.setFont(new Font(null, Font.PLAIN,15));
         label.setEnabled(false);
         label.setForeground(Settings.text_color);
