@@ -35,6 +35,7 @@ public class Settings {
     }
 
     public static void reload(){
+        board_bg_color2 = board_bg_color;
         boardCenterX = board_width/2;
         boardCenterY = board_height/2;
         circleSize = (int)min(boardCenterY*0.65,boardCenterX*0.65);
