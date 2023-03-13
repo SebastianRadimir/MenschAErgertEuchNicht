@@ -5,9 +5,7 @@ import GuiStuff.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +14,7 @@ import java.util.Random;
 import static Backend.Dice.DiceSide.drawBackground;
 import static GuiStuff.Settings.*;
 
-public class Game extends JPanel {
+public class Game extends JPanel{
 
     private Timer t;
     private final DiceGUI d;
@@ -34,6 +32,7 @@ public class Game extends JPanel {
     private final int animationSteps = 40;
     private final BufferedImage bgImage;
     public Game(Board board,JFrame parent){
+
         bgImage = getBGImage();
         ws = null;
         travelPath = null;
@@ -76,6 +75,7 @@ public class Game extends JPanel {
                 rep();
             }
         });
+
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {}
@@ -179,6 +179,7 @@ public class Game extends JPanel {
             public void mouseExited(MouseEvent e) {}
         });
     }
+
     private BufferedImage getBGImage() {
 
         try {
