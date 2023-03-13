@@ -25,7 +25,7 @@ public class RuleWindow extends JFrame{
         setResizable(false);
         setTitle("Regeln");
         label.setFont(new Font(null, Font.PLAIN,15));
-        label.setEnabled(false);
+        label.setEditable(false);
         label.setForeground(Settings.text_color);
         label.setBounds(0,0,800,400);
         add(label);

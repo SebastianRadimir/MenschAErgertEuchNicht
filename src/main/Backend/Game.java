@@ -56,6 +56,23 @@ public class Game extends JPanel{
             nextPlayerBtn.setBackground(new Color(0, 0, 0, 0));
         }
         nextPlayerBtn.setVisible(true);
+        parent.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (e.getKeyChar() == ' '){
+                    d.roll();
+                    rep();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
