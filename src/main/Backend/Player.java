@@ -14,6 +14,8 @@ public class Player {
     private final int maY;
     private final int miX;
     private final int miY;
+    private final int minMx;
+    private final int minMy;
 
 
     public Player(int playerIndex, int figureAmount, Color playerColor, String playerName){
@@ -23,9 +25,8 @@ public class Player {
         this.playerName = playerName;
 
         Field[] homeFields = new Field[figureAmount];
-        //double angle = (PI2/playerAmount*(playerIndex+0.5));
         double angle = PI2/(playerAmount*fieldPerPerson);
-        angle = angle * (((playerIndex*fieldPerPerson)+2)+0.5);
+        angle = angle * ((playerIndex*fieldPerPerson)+2);
         double minDist = (circleSize/8.0);
         double dists = ((circleSize)-minDist)/figureAmount;
         for (int i = 0; i < figureAmount; i++) {
@@ -34,11 +35,14 @@ public class Player {
             double pn = (dists*(figureAmount-i))+minDist;
             homeFields[i] = new Field(i, (int)((Math.cos(angle)*pn) + boardCenterX), (int)((Math.sin(angle)*pn) + boardCenterY));
         }
-        maX = (int)(Math.cos(angle)*(dists+minDist)) + boardCenterX;
-        maY = (int)(Math.sin(angle)*(dists+minDist)) + boardCenterY;
+        maX = homeFields[0].getX();
+        maY = homeFields[0].getY();
 
         miX = (int)(Math.cos(angle)*getBoardShape(angle)) + boardCenterX;
         miY = (int)(Math.sin(angle)*getBoardShape(angle)) + boardCenterY;
+
+        minMx = homeFields[figureAmount-1].getX();
+        minMy = homeFields[figureAmount-1].getY();
 
         home = new House(this, homeFields);
 
@@ -87,6 +91,7 @@ public class Player {
         g2.setStroke(new BasicStroke(fieldSize/3.0f));
         g.setColor(board_line_color);
         g.drawLine(maX,maY,miX,miY);
+        g.drawLine(maX,maY,minMx,minMy);
 
         this.home.draw(g, mpx, mpy);
 
