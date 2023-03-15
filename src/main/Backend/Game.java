@@ -373,7 +373,7 @@ public class Game extends JPanel{
 
             g.setColor(runner.getColor());
             Point p = travelPath[(int)movePIndex];
-            double dynamicSize = Math.abs(Math.sin((movePIndex*Math.PI)*(1.0/(endMoveIndex)*(endMoveIndex/(double)animationSteps)))*1.5)+1;
+            double dynamicSize = Math.abs(Math.sin((movePIndex*Math.PI)/(double)animationSteps)*1.5)+1;
             double fs = (fieldSize/2.0)*dynamicSize;
 
             g.fillOval((int)(p.x-fs),(int)(p.y-fs),(int)(fieldSize*dynamicSize), (int)(fieldSize*dynamicSize));
