@@ -2,16 +2,19 @@ package Backend;
 
 import GuiStuff.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Random;
 
 import static Backend.Dice.DiceSide.drawBackground;
 import static GuiStuff.Settings.*;
 
-public class Game extends JPanel {
+public class Game extends JPanel{
 
     private Timer t;
     private final DiceGUI d;
@@ -23,11 +26,14 @@ public class Game extends JPanel {
     private final RuleWindow rw;
     private Figure runner;
     private double movePIndex = 0;
-    private double endMoveIndex = 0;
+    private int endMoveIndex = 0;
     private Point[] travelPath;
     private Field predictedPathField = null;
-    private int animationSteps = 45;
+    private final int animationSteps = 40;
+    private final BufferedImage bgImage;
     public Game(Board board,JFrame parent){
+
+        bgImage = getBGImage();
         ws = null;
         travelPath = null;
         runner = null;
@@ -46,7 +52,30 @@ public class Game extends JPanel {
         this.add(nextPlayerBtn);
         nextPlayerBtn.setSize(buttonSize, buttonSize);
         nextPlayerBtn.setLocation(Settings.board_width-Settings.buttonSize, board_height-Settings.buttonSize);
+        if (bgImage != null) {
+            nextPlayerBtn.setBackground(new Color(0, 0, 0, 0));
+        }
         nextPlayerBtn.setVisible(true);
+        parent.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                if (runner != null || ws != null){
+                    return;
+                }
+                if (e.getKeyChar() == ' '){
+                    d.roll();
+                    rep();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -66,6 +95,7 @@ public class Game extends JPanel {
                 rep();
             }
         });
+
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {}
@@ -170,6 +200,16 @@ public class Game extends JPanel {
         });
     }
 
+    private BufferedImage getBGImage() {
+
+        try {
+            String name = "src/assets/woodenplank"+new Random().nextInt(1,4)+".jpg";
+
+            return ImageIO.read(new File(name));
+        } catch (IOException e) {
+            return null;
+        }
+    }
     private void predict(Field f){
         predictedPathField = null;
         if (f != null && f.isOccupied() && d.getValue() >= 1 && f.getFigure().isSamePlayer(currentPlayer())){
@@ -228,18 +268,14 @@ public class Game extends JPanel {
                 }
                 return;
             }
-
-            if (fieldInQuestion.isOccupied()){
-                fieldInQuestion.getFigure().kill();
-                pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
-            }
             selectedField.getFigure().addSteps(amount);
 
             runner = selectedField.clearField();
             movePIndex = 0;
 
             endMoveIndex = animationSteps*amount;
-            travelPath = new Point[(int) endMoveIndex];
+            travelPath = new Point[endMoveIndex];
+
             for (int i = 0; i < amount; i++) {
 
                 int realIndex = ((selectedField.getIndex()+i) );
@@ -267,7 +303,13 @@ public class Game extends JPanel {
 
         movePIndex+=1;
 
-        if (movePIndex>=endMoveIndex-1) {
+        if (movePIndex>=(endMoveIndex-1)) {
+
+            if (fieldInQuestion.isOccupied()){
+                fieldInQuestion.getFigure().kill();
+                pl.updateFiguresAtHome(board.getPlayerByFigure(fieldInQuestion.getFigure()));
+            }
+
             movePIndex = 0;
             endMoveIndex = 0;
             t.stop();
@@ -286,6 +328,9 @@ public class Game extends JPanel {
         ws = new Winscreen(board.players[currentPlayerIndex]);
         pl.setVisible(false);
         rw.setVisible(false);
+        board_bg_color = new Color(0,0,0,0);
+        d.setVisible(false);
+        d.setBackground(board_bg_color);
         nextPlayerBtn.setVisible(false);
         rep();
         t = new Timer(16, ae -> {
@@ -305,8 +350,22 @@ public class Game extends JPanel {
         int xpos = (int) b.getX();
         int ypos = (int) b.getY();
 
-        g.setColor(board_bg_color);
+        g.setColor(board_bg_color2);
+
         g.fillRect(0, 0, board_width + 10, board_height + 10);
+        if (bgImage != null) {
+            g.drawImage(bgImage, 0, 0, this);
+            g.setColor(board_bg_color2.brighter());
+            g.fillRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
+
+            Graphics2D g2 = (Graphics2D) g;
+            Stroke prevS = g2.getStroke();
+            g2.setStroke(new BasicStroke(buttonSize/10));
+
+            g.setColor(board_bg_color2.darker());
+            g.drawRect((boardCenterX-boardCenterY)+10, 10, board_height-10, board_height-20);
+            g2.setStroke(prevS);
+        }
 
         board.draw(g, xpos, ypos);
 
@@ -314,7 +373,6 @@ public class Game extends JPanel {
 
             g.setColor(runner.getColor());
             Point p = travelPath[(int)movePIndex];
-            //double dynamicSize = (Math.sin((movePIndex*Math.PI)*(1.0/endMoveIndex))*1.5)+1;
             double dynamicSize = Math.abs(Math.sin((movePIndex*Math.PI)*(1.0/(endMoveIndex)*(endMoveIndex/(double)animationSteps)))*1.5)+1;
             double fs = (fieldSize/2.0)*dynamicSize;
 
@@ -325,30 +383,29 @@ public class Game extends JPanel {
             predictedPathField.draw(g, predictedPathField.getX(),predictedPathField.getY());
         }
 
-        d.paintComponent(g);
-
         if (ws != null){
+            d.paintComponent(g);
             ws.paintWinner(g);
             if (ws.passedEnough()){
 
                 if (boardCenterY+(int)(buttonSize*1.5)>ypos && boardCenterY+((int)(buttonSize*0.75))<ypos){
-                    g.setColor(board_bg_color.darker().darker());
+                    g.setColor(highlight_color);
                 }else {
-                    g.setColor(board_bg_color.darker());
+                    g.setColor(highlight_color.darker());
                 }
 
                 g.setFont(new Font(null, Font.PLAIN, buttonSize));
 
-                String options = "Nochmal Spielen";
+                String options = "Nochmal spielen";
                 int ls = options.length();
 
                 g.drawString(options, (int)(boardCenterX-((ls/4.0)*buttonSize)), boardCenterY+((int)(buttonSize*1.5)));
 
 
                 if (boardCenterY+(buttonSize*2.25)<ypos && boardCenterY+(buttonSize*3)>ypos){
-                    g.setColor(board_bg_color.darker().darker());
+                    g.setColor(highlight_color);
                 }else {
-                    g.setColor(board_bg_color.darker());
+                    g.setColor(highlight_color.darker());
                 }
                 options = "Beenden";
                 ls = options.length();
@@ -358,6 +415,7 @@ public class Game extends JPanel {
             }
         }else {
 
+            d.paintComponent(g);
             Color ps = Settings.dice_BG_color;
             Settings.dice_BG_color = board_bg_color.darker();
             drawBackground(g,0,0,buttonSize,buttonSize);

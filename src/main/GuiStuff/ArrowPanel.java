@@ -45,7 +45,7 @@ public class ArrowPanel extends JPanel {
     }
 
     public interface ComputeGraphics {
-        public void drawShape(Graphics g, int xMin, int yMin, int xSize, int ySize, double modifier);
+        void drawShape(Graphics g, int xMin, int yMin, int xSize, int ySize, double modifier);
     }
 
     public static class ArrowPolygon implements ComputeGraphics {

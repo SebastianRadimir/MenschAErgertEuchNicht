@@ -5,7 +5,6 @@ import Backend.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -120,33 +119,6 @@ public class PlayerList extends JPanel {
         }
     }
 
-    /**
-     * will update the figures that are still home from the player that is given
-     * if the method is called
-     * @param playerName_p insert the Player.getPlayerName() for best use
-     */
-    public void updateFiguresAtHome(String playerName_p){
-        for (JLabel label :figuresAtHomeLabelList) {
-            if(label.getName().equals(playerName_p)){
-                //we found the Label we want to update
-
-                for (Player player: playerlist) {
-                    if(player.getPlayerName().equals(playerName_p)){
-                        //compare the playerName to the Player-class to get actual stats
-
-                        int figureThatAreHome = 0;
-                        Figure[] figureList = player.getFigures();
-                        for(Figure figureSingle:figureList){
-                            if(figureSingle.isHome()){
-                                figureThatAreHome += 1;
-                            }
-                        }
-                        label.setText(figureThatAreHome + "/" + player.getFigures().length);
-                    }
-                }
-            }
-        }
-    }
 
     /**
      * Sets the whole playerPanel to a green Color and resets every other playerPanel to the defaultColor

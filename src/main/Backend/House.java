@@ -7,7 +7,7 @@ import static GuiStuff.Settings.*;
 public class House {
 
     private final Player owner;
-    private Field[] rooms;
+    private final Field[] rooms;
 
     public House(Player owner, Field[] rooms){
 
@@ -48,23 +48,18 @@ public class House {
 
     public Field getField(int xPos, int yPos){
 
-        for (int i = 0; i < rooms.length; i++) {
-
-            Field f = rooms[i];
+        for (Field f : rooms) {
 
             int x = f.getX();
             int y = f.getY();
 
-            if (Math.sqrt(((xPos - x)*(xPos - x)) + ((yPos - y) * (yPos - y))) <= (fieldSize/2.0)){
+            if (Math.sqrt(((xPos - x) * (xPos - x)) + ((yPos - y) * (yPos - y))) <= (fieldSize / 2.0)) {
                 return f;
             }
         }
         return null;
     }
 
-    public Field[] getRooms() {
-        return rooms;
-    }
     public void draw(Graphics g, int mpx, int mpy){
 
         g.setColor(board_line_color);
