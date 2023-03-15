@@ -39,10 +39,6 @@ public class Board {
             course[i-3] = new Field(i-3, (int)((Math.cos(ni)*pn) + boardCenterX), (int)((Math.sin(ni)*pn) + boardCenterY));
         }
     }
-    public Point getPoint(int i){
-        i = (i%circlePrecision);
-        return new Point(courseLineArrX[i], courseLineArrY[i]);
-    }
 
     public Player getPlayerByFigure(Figure fig){
 

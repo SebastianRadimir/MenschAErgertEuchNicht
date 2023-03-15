@@ -59,6 +59,9 @@ public class Game extends JPanel{
         parent.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
+                if (runner != null || ws != null){
+                    return;
+                }
                 if (e.getKeyChar() == ' '){
                     d.roll();
                     rep();

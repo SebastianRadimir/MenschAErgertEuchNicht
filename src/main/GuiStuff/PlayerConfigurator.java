@@ -8,14 +8,10 @@ import Backend.Player;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.Objects;
 import java.util.Random;
 
 import javax.swing.*;
-
-import static GuiStuff.Settings.board_bg_color2;
 
 public class PlayerConfigurator extends JFrame{
     private final int numPlayers;
@@ -54,16 +50,13 @@ public class PlayerConfigurator extends JFrame{
             colorButtons[i].setPreferredSize(new Dimension(120, 30));
             int index = i;
             colorButtons[index].setBackground(color[index]);
-            colorButtons[i].addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Color c = JColorChooser.showDialog(null, "Choose Color", Color.WHITE);
-                    if(c != null)
-                    {
-                        color[index] = c;
-                    }
-                    colorButtons[index].setBackground(color[index]);
+            colorButtons[i].addActionListener(e -> {
+                Color c = JColorChooser.showDialog(null, "Choose Color", Color.WHITE);
+                if(c != null)
+                {
+                    color[index] = c;
                 }
+                colorButtons[index].setBackground(color[index]);
             });
             mainPanel.add(colorButtons[i]);
         }
@@ -73,12 +66,9 @@ public class PlayerConfigurator extends JFrame{
         backButton.setBounds(10, 40, 140, 25);
         mainPanel.add(backButton);
 
-        backButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                dispose();
-                new WelcomeGUI();
-            }
+        backButton.addActionListener(e -> {
+            dispose();
+            new WelcomeGUI();
         });
 
         JLabel emptyLabel = new JLabel(" ");
@@ -89,50 +79,47 @@ public class PlayerConfigurator extends JFrame{
         confirmButton.setBounds(10, 40, 140, 25);
         mainPanel.add(confirmButton);
 
-        confirmButton.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
+        confirmButton.addActionListener(e -> {
 
-                StringBuilder sb = new StringBuilder();
-                if(invalidName()){
-                    sb.append("\nInvalid Name used!");
-                }
-                if (sameNames()){
-                    sb.append("\n2 Players cannot have the same Name!");
-                }
-                if (sameColor()){
-                    sb.append("\n2 Players cannot have the same color!");
-                }
-
-                if (!sb.isEmpty()){
-                    JOptionPane.showMessageDialog(null, sb.toString(),"Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-
-                Settings.board_width = size.width;
-                Settings.board_height = size.height;
-                Settings.fieldPerPerson = fieldPerPerson;  // max 10
-                Settings.playerAmount = numPlayers;  // max 20
-                Settings.figureAmount = figureAmount;  // max 25
-                Settings.board_bg_color = new Color(36,70,103);
-                Settings.board_bg_color2 = new Color(36,70,103);
-                Settings.reload();
-
-                Player[] ps = new Player[numPlayers];
-                for (int i = 0; i < numPlayers; i++){
-                    String rs;
-                    try{
-                        rs = playerNameFields[i].getText().substring(0,20);
-                    }catch (Exception ignore){
-                        rs = playerNameFields[i].getText();
-                    }
-                    ps[i] = new Player(i,figureAmount, color[i], rs);
-                }
-                dispose();
-                startGame(ps);
+            StringBuilder sb = new StringBuilder();
+            if(invalidName()){
+                sb.append("\nInvalid Name used!");
             }
+            if (sameNames()){
+                sb.append("\n2 Players cannot have the same Name!");
+            }
+            if (sameColor()){
+                sb.append("\n2 Players cannot have the same color!");
+            }
+
+            if (!sb.isEmpty()){
+                JOptionPane.showMessageDialog(null, sb.toString(),"Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+
+            Settings.board_width = size.width;
+            Settings.board_height = size.height;
+            Settings.fieldPerPerson = fieldPerPerson;  // max 10
+            Settings.playerAmount = numPlayers;  // max 20
+            Settings.figureAmount = figureAmount;  // max 25
+            Settings.board_bg_color = new Color(36,70,103);
+            Settings.board_bg_color2 = new Color(36,70,103);
+            Settings.reload();
+
+            Player[] ps = new Player[numPlayers];
+            for (int i = 0; i < numPlayers; i++){
+                String rs;
+                try{
+                    rs = playerNameFields[i].getText().substring(0,20);
+                }catch (Exception ignore){
+                    rs = playerNameFields[i].getText();
+                }
+                ps[i] = new Player(i,figureAmount, color[i], rs);
+            }
+            dispose();
+            startGame(ps);
         });
 
 

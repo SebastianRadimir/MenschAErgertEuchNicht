@@ -10,10 +10,10 @@ import static GuiStuff.Settings.*;
 
 public class Winscreen extends JPanel {
 
-    private Color color;
-    private String name;
-    private Star[] stars;
-    private Star specialSnowflake;
+    private final Color color;
+    private final String name;
+    private final Star[] stars;
+    private final Star specialSnowflake;
     int maxStars = 500;
 
     public Winscreen(Player winingP){
