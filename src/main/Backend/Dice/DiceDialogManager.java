@@ -18,7 +18,7 @@ public class DiceDialogManager extends JComponent implements Accessible {
 
         DiceValueTracker ok = new DiceValueTracker(pane);
         JDialog dialog = createDialog(pane, ok);
-
+        pane.setParent(dialog);
         dialog.addComponentListener(new DisposeOnClose());
 
         dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);

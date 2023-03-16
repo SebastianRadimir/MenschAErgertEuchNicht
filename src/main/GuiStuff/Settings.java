@@ -22,7 +22,7 @@ public class Settings {
     public static Color board_bg_color = new Color(36,70,103);
     public static Color board_bg_color2 = new Color(36,70,103);
     public static Color board_line_color = new Color(185, 185, 185);
-    public static Color board_tile_color = new Color(107, 107, 107);
+    public static Color board_tile_color = new Color(255, 255, 255);
     public static Color highlight_color = new Color(42, 187, 220);
     public static Color text_color = new Color(0, 0, 0);
     public static Color dice_BG_color = new Color(255, 255, 255);

@@ -59,7 +59,11 @@ public class Game extends JPanel{
         parent.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                if (runner != null || ws != null){
+                if (runner != null){
+                    movePIndex = endMoveIndex-1;
+                    return;
+                }
+                if (ws != null){
                     return;
                 }
                 if (e.getKeyChar() == ' '){
@@ -105,6 +109,7 @@ public class Game extends JPanel{
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (runner != null){
+                    movePIndex = endMoveIndex-1;
                     return;
                 }
                 Point b = MouseInfo.getPointerInfo().getLocation();

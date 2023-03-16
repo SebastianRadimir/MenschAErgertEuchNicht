@@ -4,6 +4,8 @@ import GuiStuff.Settings;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 public class DiceDisplay extends JPanel {
@@ -21,6 +23,7 @@ public class DiceDisplay extends JPanel {
     private int endTimer, index;
     private Timer t;
     private DiceDialog ddl;
+    private JDialog dialog;
 
     public DiceDisplay(){
         toggleDiceColor = false;
@@ -136,5 +139,26 @@ public class DiceDisplay extends JPanel {
 
     public void addDialog(DiceDialog diceDialog) {
         this.ddl = diceDialog;
+    }
+
+    public void setParent(JDialog dialog) {
+        this.dialog = dialog;
+        this.dialog.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                while (initSpeed>=0.3) {
+                    runAnimation();
+                }
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+        });
     }
 }
